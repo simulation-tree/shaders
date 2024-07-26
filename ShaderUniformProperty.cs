@@ -10,7 +10,7 @@ namespace Shaders
     public readonly struct ShaderUniformProperty : IDisposable
     {
         public readonly FixedString name;
-        public readonly ResourceKey key;
+        public readonly DescriptorResourceKey key;
 
         /// <summary>
         /// Size of the uniform buffer object in bytes.
@@ -24,7 +24,7 @@ namespace Shaders
         /// </summary>
         public readonly ReadOnlySpan<Member> Members => members.AsSpan();
 
-        public ShaderUniformProperty(FixedString name, ResourceKey key, ReadOnlySpan<Member> members)
+        public ShaderUniformProperty(FixedString name, DescriptorResourceKey key, ReadOnlySpan<Member> members)
         {
             this.name = name;
             this.key = key;
@@ -35,7 +35,7 @@ namespace Shaders
             }
         }
 
-        public ShaderUniformProperty(ReadOnlySpan<char> name, ResourceKey key, ReadOnlySpan<Member> members)
+        public ShaderUniformProperty(ReadOnlySpan<char> name, DescriptorResourceKey key, ReadOnlySpan<Member> members)
         {
             this.name = new(name);
             this.key = key;
@@ -88,7 +88,7 @@ namespace Shaders
                 int length = name.CopyTo(buffer);
                 buffer[length++] = ' ';
                 buffer[length++] = '(';
-                length += type.ToString(buffer[length..]);
+                //length += type.value.ToString(buffer[length..]);
                 buffer[length++] = ')';
                 return length;
             }

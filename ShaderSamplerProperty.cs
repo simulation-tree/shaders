@@ -6,10 +6,10 @@ namespace Shaders
     /// <summary>
     /// Describes a shader property that references a sampled texture.
     /// </summary>
-    public readonly struct ShaderSamplerProperty(FixedString name, ResourceKey key)
+    public readonly struct ShaderSamplerProperty(FixedString name, DescriptorResourceKey key)
     {
         public readonly FixedString name = name;
-        public readonly ResourceKey key = key;
+        public readonly DescriptorResourceKey key = key;
 
         public readonly override string ToString()
         {
