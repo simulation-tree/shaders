@@ -43,6 +43,22 @@ namespace Shaders
             world.Poll();
         }
 
+        /// <summary>
+        /// Creates a new shader using the provided data entities.
+        /// <para>Data is expected to be UTF8 bytes.</para>
+        /// </summary>
+        public Shader(World world, eint vertex, eint fragment)
+        {
+            entity = new(world);
+            entity.AddComponent(new IsShader(vertex, fragment));
+            entity.CreateList<Entity, ShaderVertexInputAttribute>();
+            entity.CreateList<Entity, ShaderUniformProperty>();
+            entity.CreateList<Entity, ShaderSamplerProperty>();
+
+            world.Submit(new ShaderUpdate());
+            world.Poll();
+        }
+
         public readonly void Dispose()
         {
             entity.Dispose();
