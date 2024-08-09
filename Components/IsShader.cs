@@ -2,14 +2,24 @@
 
 namespace Shaders.Components
 {
-    public struct IsShader(eint vertex, eint fragment)
+    public struct IsShader
     {
-        public eint vertex = vertex;
-        public eint fragment = fragment;
+        public readonly uint version;
+        public readonly eint vertex;
+        public readonly eint fragment;
 
-        /// <summary>
-        /// Changed when the <see cref="byte"/> collections have updated and the shader needs to update.
-        /// </summary>
-        public bool changed = true;
+        public IsShader(uint version, eint vertex, eint fragment)
+        {
+            this.version = version;
+            this.vertex = vertex;
+            this.fragment = fragment;
+        }
+
+        public IsShader(eint vertex, eint fragment)
+        {
+            this.version = default;
+            this.vertex = vertex;
+            this.fragment = fragment;
+        }
     }
 }

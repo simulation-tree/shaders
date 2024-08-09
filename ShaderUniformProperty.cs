@@ -9,6 +9,8 @@ namespace Shaders
     /// </summary>
     public readonly struct ShaderUniformProperty : IDisposable
     {
+        //todo: fault: kinda dirty having a component thats also disposable, it requires a system to manage the disposal of the members
+
         public readonly FixedString name;
         public readonly DescriptorResourceKey key;
 
@@ -23,6 +25,9 @@ namespace Shaders
         /// All members of the uniform buffer object.
         /// </summary>
         public readonly ReadOnlySpan<Member> Members => members.AsSpan();
+
+        public readonly byte Binding => key.Binding;
+        public readonly byte Set => key.Set;
 
         public ShaderUniformProperty(FixedString name, DescriptorResourceKey key, ReadOnlySpan<Member> members)
         {

@@ -8,7 +8,7 @@ namespace Shaders
     public readonly struct DescriptorResourceKey : IEquatable<DescriptorResourceKey>
     {
         /// <summary>
-        /// Maximum allowed value for both set or binding (1 byte size).
+        /// Maximum allowed value for both the set and binding values.
         /// </summary>
         public const byte MaxSetOrBindingValue = 15;
 
@@ -17,14 +17,14 @@ namespace Shaders
         public readonly byte Set => (byte)(value >> 4);
         public readonly byte Binding => (byte)(value & 0x0F);
 
-        public DescriptorResourceKey(byte set, byte binding)
+        public DescriptorResourceKey(byte binding, byte set)
         {
-            if (set > MaxSetOrBindingValue || binding > MaxSetOrBindingValue)
+            if (set >= MaxSetOrBindingValue || binding >= MaxSetOrBindingValue)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            value = (byte)(set << 4 | binding);
+            value = (byte)(binding << 4 | set);
         }
 
         public readonly override string ToString()
