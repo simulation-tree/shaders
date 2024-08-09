@@ -3,12 +3,12 @@
 namespace Shaders
 {
     /// <summary>
-    /// A value that refers to a set and binding combination within shaders.
+    /// A value that locates a resource inside a shader.
     /// </summary>
     public readonly struct DescriptorResourceKey : IEquatable<DescriptorResourceKey>
     {
         /// <summary>
-        /// Maximum allowed value for both the set and binding values.
+        /// Maximum allowed value for both the binding and set values.
         /// </summary>
         public const byte MaxSetOrBindingValue = 15;
 
@@ -24,7 +24,7 @@ namespace Shaders
                 throw new ArgumentOutOfRangeException();
             }
 
-            value = (byte)(binding << 4 | set);
+            value = (byte)(set << 4 | binding);
         }
 
         public readonly override string ToString()
@@ -36,10 +36,10 @@ namespace Shaders
 
         public readonly int ToString(Span<char> buffer)
         {
-            Set.TryFormat(buffer, out int length);
-            buffer[length++] = ':';
-            Binding.TryFormat(buffer[length..], out int bindingLength);
-            return length + bindingLength;
+            Binding.TryFormat(buffer, out int bindingLength);
+            buffer[bindingLength++] = ':';
+            Set.TryFormat(buffer[bindingLength..], out int setLength);
+            return bindingLength + setLength;
         }
 
         public readonly override bool Equals(object? obj)

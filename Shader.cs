@@ -10,7 +10,7 @@ namespace Shaders
 {
     public readonly struct Shader : IShader, IDisposable
     {
-        public readonly Entity entity;
+        private readonly Entity entity;
 
         World IEntity.World => entity.world;
         eint IEntity.Value => entity.value;
