@@ -36,4 +36,9 @@ public static class ShaderFunctions
     {
         return shader.GetList<T, ShaderSamplerProperty>().AsSpan();
     }
+
+    public static ReadOnlySpan<ShaderPushConstant> GetPushConstants<T>(this T shader) where T : IShader
+    {
+        return shader.GetList<T, ShaderPushConstant>().AsSpan();
+    }
 }

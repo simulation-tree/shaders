@@ -34,6 +34,7 @@ namespace Shaders
             DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
             entity.AddComponent(new IsShader(vertex.entity.value, fragment.entity.value));
+            entity.CreateList<Entity, ShaderPushConstant>();
             entity.CreateList<Entity, ShaderVertexInputAttribute>();
             entity.CreateList<Entity, ShaderUniformProperty>();
             entity.CreateList<Entity, ShaderSamplerProperty>();
@@ -51,6 +52,7 @@ namespace Shaders
         {
             entity = new(world);
             entity.AddComponent(new IsShader(vertex, fragment));
+            entity.CreateList<Entity, ShaderPushConstant>();
             entity.CreateList<Entity, ShaderVertexInputAttribute>();
             entity.CreateList<Entity, ShaderUniformProperty>();
             entity.CreateList<Entity, ShaderSamplerProperty>();
@@ -70,7 +72,7 @@ namespace Shaders
         }
         
 
-        public static Query GetQuery(World world)
+        static Query IEntity.GetQuery(World world)
         {
             return new(world, RuntimeType.Get<IsShader>());
         }
