@@ -72,7 +72,7 @@ namespace Shaders
         }
         
 
-        static Query IEntity.GetQuery(World world)
+        Query IEntity.GetQuery(World world)
         {
             return new(world, RuntimeType.Get<IsShader>());
         }
