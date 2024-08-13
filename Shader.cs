@@ -15,10 +15,13 @@ namespace Shaders
         World IEntity.World => entity.world;
         eint IEntity.Value => entity.value;
 
+#if NET
+        [Obsolete("Default constructor not available", true)]
         public Shader()
         {
             throw new InvalidOperationException("Cannot create a shader without a world.");
         }
+#endif
 
         public Shader(World world, eint existingEntity)
         {

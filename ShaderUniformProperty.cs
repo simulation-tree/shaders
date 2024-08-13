@@ -34,6 +34,7 @@ namespace Shaders
             this.name = name;
             this.key = key;
             this.members = new(members);
+            size = default;
             foreach (Member member in members)
             {
                 size += member.type.Size;
@@ -45,6 +46,7 @@ namespace Shaders
             this.name = new(name);
             this.key = key;
             this.members = new(members);
+            size = default;
             foreach (Member member in members)
             {
                 size += member.type.Size;
@@ -76,10 +78,16 @@ namespace Shaders
         /// <summary>
         /// A member of a uniform buffer object.
         /// </summary>
-        public readonly struct Member(RuntimeType type, FixedString name)
+        public readonly struct Member
         {
-            public readonly RuntimeType type = type;
-            public readonly FixedString name = name;
+            public readonly RuntimeType type;
+            public readonly FixedString name;
+
+            public Member(RuntimeType type, FixedString name)
+            {
+                this.type = type;
+                this.name = name;
+            }
 
             public readonly override string ToString()
             {
@@ -93,7 +101,7 @@ namespace Shaders
                 int length = name.CopyTo(buffer);
                 buffer[length++] = ' ';
                 buffer[length++] = '(';
-                //length += type.value.ToString(buffer[length..]);
+                length += type.ToString(buffer[length..]);
                 buffer[length++] = ')';
                 return length;
             }
