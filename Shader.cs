@@ -42,6 +42,7 @@ namespace Shaders
             entity.CreateList<Entity, ShaderUniformProperty>();
             entity.CreateList<Entity, ShaderSamplerProperty>();
 
+            //todo: remove this
             world.Submit(new DataUpdate());
             world.Submit(new ShaderUpdate());
             world.Poll();
@@ -60,6 +61,7 @@ namespace Shaders
             entity.CreateList<Entity, ShaderUniformProperty>();
             entity.CreateList<Entity, ShaderSamplerProperty>();
 
+            //todo: remove this
             world.Submit(new ShaderUpdate());
             world.Poll();
         }
