@@ -36,7 +36,7 @@ namespace Shaders
             DataRequest vertex = new(world, vertexAddress);
             DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
-            entity.AddComponent(new IsShader(vertex.entity.value, fragment.entity.value));
+            entity.AddComponent(new IsShader(vertex.GetEntityValue(), fragment.GetEntityValue()));
             entity.CreateList<Entity, ShaderPushConstant>();
             entity.CreateList<Entity, ShaderVertexInputAttribute>();
             entity.CreateList<Entity, ShaderUniformProperty>();
@@ -52,16 +52,33 @@ namespace Shaders
         /// Creates a new shader using the provided data entities.
         /// <para>Data is expected to be UTF8 bytes.</para>
         /// </summary>
-        public Shader(World world, eint vertex, eint fragment)
+        public Shader(World world, eint vertexData, eint fragmentData)
         {
             entity = new(world);
-            entity.AddComponent(new IsShader(vertex, fragment));
+            entity.AddComponent(new IsShader(vertexData, fragmentData));
             entity.CreateList<Entity, ShaderPushConstant>();
             entity.CreateList<Entity, ShaderVertexInputAttribute>();
             entity.CreateList<Entity, ShaderUniformProperty>();
             entity.CreateList<Entity, ShaderSamplerProperty>();
 
             //todo: remove this
+            world.Submit(new ShaderUpdate());
+            world.Poll();
+        }
+
+        public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
+        {
+            DataRequest vertex = new(world, vertexAddress);
+            DataRequest fragment = new(world, fragmentAddress);
+            entity = new(world);
+            entity.AddComponent(new IsShader(vertex.GetEntityValue(), fragment.GetEntityValue()));
+            entity.CreateList<Entity, ShaderPushConstant>();
+            entity.CreateList<Entity, ShaderVertexInputAttribute>();
+            entity.CreateList<Entity, ShaderUniformProperty>();
+            entity.CreateList<Entity, ShaderSamplerProperty>();
+
+            //todo: remove this
+            world.Submit(new DataUpdate());
             world.Submit(new ShaderUpdate());
             world.Poll();
         }
