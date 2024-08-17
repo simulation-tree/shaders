@@ -36,11 +36,13 @@ namespace Shaders
             DataRequest vertex = new(world, vertexAddress);
             DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
-            entity.AddComponent(new IsShader(vertex.GetEntityValue(), fragment.GetEntityValue()));
-            entity.CreateList<Entity, ShaderPushConstant>();
-            entity.CreateList<Entity, ShaderVertexInputAttribute>();
-            entity.CreateList<Entity, ShaderUniformProperty>();
-            entity.CreateList<Entity, ShaderSamplerProperty>();
+            rint vertexReference = entity.AddReference(vertex);
+            rint fragmentReference = entity.AddReference(fragment);
+            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
+            entity.CreateList<ShaderPushConstant>();
+            entity.CreateList<ShaderVertexInputAttribute>();
+            entity.CreateList<ShaderUniformProperty>();
+            entity.CreateList<ShaderSamplerProperty>();
 
             //todo: remove this
             world.Submit(new DataUpdate());
@@ -49,17 +51,19 @@ namespace Shaders
         }
 
         /// <summary>
-        /// Creates a new shader using the provided data entities.
+        /// Creates a new shader using the provided existing data entities.
         /// <para>Data is expected to be UTF8 bytes.</para>
         /// </summary>
         public Shader(World world, eint vertexData, eint fragmentData)
         {
             entity = new(world);
-            entity.AddComponent(new IsShader(vertexData, fragmentData));
-            entity.CreateList<Entity, ShaderPushConstant>();
-            entity.CreateList<Entity, ShaderVertexInputAttribute>();
-            entity.CreateList<Entity, ShaderUniformProperty>();
-            entity.CreateList<Entity, ShaderSamplerProperty>();
+            rint vertexReference = entity.AddReference(vertexData);
+            rint fragmentReference = entity.AddReference(fragmentData);
+            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
+            entity.CreateList<ShaderPushConstant>();
+            entity.CreateList<ShaderVertexInputAttribute>();
+            entity.CreateList<ShaderUniformProperty>();
+            entity.CreateList<ShaderSamplerProperty>();
 
             //todo: remove this
             world.Submit(new ShaderUpdate());
@@ -71,11 +75,13 @@ namespace Shaders
             DataRequest vertex = new(world, vertexAddress);
             DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
-            entity.AddComponent(new IsShader(vertex.GetEntityValue(), fragment.GetEntityValue()));
-            entity.CreateList<Entity, ShaderPushConstant>();
-            entity.CreateList<Entity, ShaderVertexInputAttribute>();
-            entity.CreateList<Entity, ShaderUniformProperty>();
-            entity.CreateList<Entity, ShaderSamplerProperty>();
+            rint vertexReference = entity.AddReference(vertex);
+            rint fragmentReference = entity.AddReference(fragment);
+            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
+            entity.CreateList<ShaderPushConstant>();
+            entity.CreateList<ShaderVertexInputAttribute>();
+            entity.CreateList<ShaderUniformProperty>();
+            entity.CreateList<ShaderSamplerProperty>();
 
             //todo: remove this
             world.Submit(new DataUpdate());
@@ -93,10 +99,54 @@ namespace Shaders
             return entity.ToString();
         }
         
-
         Query IEntity.GetQuery(World world)
         {
             return new(world, RuntimeType.Get<IsShader>());
+        }
+
+        public readonly uint GetVersion()
+        {
+            IsShader component = entity.GetComponent<IsShader>();
+            return component.version;
+        }
+
+        public readonly ReadOnlySpan<byte> GetVertexBytes()
+        {
+            IsShader component = entity.GetComponent<IsShader>();
+            Entity vertexShader = entity.GetReference<Entity>(component.vertexReference);
+            return vertexShader.GetList<byte>().AsSpan();
+        }
+
+        public readonly ReadOnlySpan<byte> GetFragmentBytes()
+        {
+            IsShader component = entity.GetComponent<IsShader>();
+            Entity fragmentShader = entity.GetReference<Entity>(component.fragmentReference);
+            return fragmentShader.GetList<byte>().AsSpan();
+        }
+
+        public readonly ReadOnlySpan<ShaderVertexInputAttribute> GetVertexAttributes()
+        {
+            return entity.GetList<ShaderVertexInputAttribute>().AsSpan();
+        }
+
+        public readonly ReadOnlySpan<ShaderUniformProperty> GetUniformProperties()
+        {
+            return entity.GetList<ShaderUniformProperty>().AsSpan();
+        }
+
+        public readonly ReadOnlySpan<ShaderSamplerProperty> GetSamplerProperties()
+        {
+            return entity.GetList<ShaderSamplerProperty>().AsSpan();
+        }
+
+        public readonly ReadOnlySpan<ShaderPushConstant> GetPushConstants()
+        {
+            return entity.GetList<ShaderPushConstant>().AsSpan();
+        }
+
+        public static implicit operator Entity(Shader shader)
+        {
+            return shader.entity;
         }
     }
 }

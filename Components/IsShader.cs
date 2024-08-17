@@ -4,22 +4,15 @@ namespace Shaders.Components
 {
     public struct IsShader
     {
-        public readonly uint version;
-        public readonly eint vertex;
-        public readonly eint fragment;
+        public uint version;
+        public rint vertexReference;
+        public rint fragmentReference;
 
-        public IsShader(uint version, eint vertex, eint fragment)
-        {
-            this.version = version;
-            this.vertex = vertex;
-            this.fragment = fragment;
-        }
-
-        public IsShader(eint vertex, eint fragment)
+        public IsShader(rint vertexReference, rint fragmentReference)
         {
             this.version = default;
-            this.vertex = vertex;
-            this.fragment = fragment;
+            this.vertexReference = vertexReference;
+            this.fragmentReference = fragmentReference;
         }
     }
 }

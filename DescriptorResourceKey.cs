@@ -52,6 +52,11 @@ namespace Shaders
             return value == other.value;
         }
 
+        public readonly bool Equals(byte binding, byte set)
+        {
+            return value == (byte)(set << 4 | binding);
+        }
+
         public readonly override int GetHashCode()
         {
             return HashCode.Combine(value);
