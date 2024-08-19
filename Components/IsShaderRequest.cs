@@ -2,19 +2,15 @@
 
 namespace Shaders.Components
 {
-    public struct IsShader
+    public struct IsShaderRequest
     {
-        /// <summary>
-        /// Incremented when the <see cref="byte"/> data changes.
-        /// </summary>
         public uint version;
-
         public rint vertex;
         public rint fragment;
 
-        public IsShader(rint vertex, rint fragment)
+        public IsShaderRequest(rint vertex, rint fragment)
         {
-            this.version = default;
+            version = default;
             this.vertex = vertex;
             this.fragment = fragment;
         }

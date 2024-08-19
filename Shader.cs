@@ -1,16 +1,21 @@
 ﻿using Data;
-using Data.Events;
 using Shaders.Components;
-using Shaders.Events;
 using Simulation;
 using System;
 using Unmanaged;
+using Unmanaged.Collections;
 
 namespace Shaders
 {
     public readonly struct Shader : IShader, IDisposable
     {
         private readonly Entity entity;
+
+        public readonly ReadOnlySpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetList<ShaderVertexInputAttribute>().AsSpan();
+        public readonly ReadOnlySpan<ShaderUniformProperty> UniformProperties => entity.GetList<ShaderUniformProperty>().AsSpan();
+        public readonly ReadOnlySpan<ShaderSamplerProperty> SamplerProperties => entity.GetList<ShaderSamplerProperty>().AsSpan();
+        public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetList<ShaderPushConstant>().AsSpan();
+        public readonly bool IsLoaded => entity.ContainsComponent<IsShader>();
 
         World IEntity.World => entity.world;
         eint IEntity.Value => entity.value;
@@ -38,36 +43,7 @@ namespace Shaders
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
-            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
-            entity.CreateList<ShaderPushConstant>();
-            entity.CreateList<ShaderVertexInputAttribute>();
-            entity.CreateList<ShaderUniformProperty>();
-            entity.CreateList<ShaderSamplerProperty>();
-
-            //todo: remove this
-            world.Submit(new DataUpdate());
-            world.Submit(new ShaderUpdate());
-            world.Poll();
-        }
-
-        /// <summary>
-        /// Creates a new shader using the provided existing data entities.
-        /// <para>Data is expected to be UTF8 bytes.</para>
-        /// </summary>
-        public Shader(World world, eint vertexData, eint fragmentData)
-        {
-            entity = new(world);
-            rint vertexReference = entity.AddReference(vertexData);
-            rint fragmentReference = entity.AddReference(fragmentData);
-            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
-            entity.CreateList<ShaderPushConstant>();
-            entity.CreateList<ShaderVertexInputAttribute>();
-            entity.CreateList<ShaderUniformProperty>();
-            entity.CreateList<ShaderSamplerProperty>();
-
-            //todo: remove this
-            world.Submit(new ShaderUpdate());
-            world.Poll();
+            entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
         }
 
         public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
@@ -77,16 +53,7 @@ namespace Shaders
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
-            entity.AddComponent(new IsShader(vertexReference, fragmentReference));
-            entity.CreateList<ShaderPushConstant>();
-            entity.CreateList<ShaderVertexInputAttribute>();
-            entity.CreateList<ShaderUniformProperty>();
-            entity.CreateList<ShaderSamplerProperty>();
-
-            //todo: remove this
-            world.Submit(new DataUpdate());
-            world.Submit(new ShaderUpdate());
-            world.Poll();
+            entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
         }
 
         public readonly void Dispose()
@@ -98,7 +65,7 @@ namespace Shaders
         {
             return entity.ToString();
         }
-        
+
         Query IEntity.GetQuery(World world)
         {
             return new(world, RuntimeType.Get<IsShader>());
@@ -113,35 +80,60 @@ namespace Shaders
         public readonly ReadOnlySpan<byte> GetVertexBytes()
         {
             IsShader component = entity.GetComponent<IsShader>();
-            Entity vertexShader = entity.GetReference<Entity>(component.vertexReference);
+            Entity vertexShader = entity.GetReference<Entity>(component.vertex);
             return vertexShader.GetList<byte>().AsSpan();
         }
 
         public readonly ReadOnlySpan<byte> GetFragmentBytes()
         {
             IsShader component = entity.GetComponent<IsShader>();
-            Entity fragmentShader = entity.GetReference<Entity>(component.fragmentReference);
+            Entity fragmentShader = entity.GetReference<Entity>(component.fragment);
             return fragmentShader.GetList<byte>().AsSpan();
         }
 
-        public readonly ReadOnlySpan<ShaderVertexInputAttribute> GetVertexAttributes()
+        public readonly uint GetMemberCount(ReadOnlySpan<char> uniformProperty)
         {
-            return entity.GetList<ShaderVertexInputAttribute>().AsSpan();
+            return GetMemberCount(new FixedString(uniformProperty));
         }
 
-        public readonly ReadOnlySpan<ShaderUniformProperty> GetUniformProperties()
+        public readonly uint GetMemberCount(FixedString uniformProperty)
         {
-            return entity.GetList<ShaderUniformProperty>().AsSpan();
+            UnmanagedList<ShaderUniformPropertyMember> allMembers = entity.GetList<ShaderUniformPropertyMember>();
+            uint count = 0;
+            foreach (ShaderUniformPropertyMember member in allMembers)
+            {
+                if (member.label == uniformProperty)
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
-        public readonly ReadOnlySpan<ShaderSamplerProperty> GetSamplerProperties()
+        public readonly ShaderUniformPropertyMember GetMember(ReadOnlySpan<char> uniformProperty, uint index)
         {
-            return entity.GetList<ShaderSamplerProperty>().AsSpan();
+            return GetMember(new FixedString(uniformProperty), index);
         }
 
-        public readonly ReadOnlySpan<ShaderPushConstant> GetPushConstants()
+        public readonly ShaderUniformPropertyMember GetMember(FixedString uniformProperty, uint index)
         {
-            return entity.GetList<ShaderPushConstant>().AsSpan();
+            UnmanagedList<ShaderUniformPropertyMember> allMembers = entity.GetList<ShaderUniformPropertyMember>();
+            uint count = 0;
+            foreach (ShaderUniformPropertyMember member in allMembers)
+            {
+                if (member.label == uniformProperty)
+                {
+                    if (count == index)
+                    {
+                        return member;
+                    }
+
+                    count++;
+                }
+            }
+
+            throw new IndexOutOfRangeException($"No member found at index {index} for uniform property `{uniformProperty}`");
         }
 
         public static implicit operator Entity(Shader shader)
