@@ -34,7 +34,7 @@ namespace Shaders
         }
 
         /// <summary>
-        /// Creates a new shader from the given vertex and fragment data addresses.
+        /// Creates a new shader+request from the given vertex and fragment data addresses.
         /// </summary>
         public Shader(World world, ReadOnlySpan<char> vertexAddress, ReadOnlySpan<char> fragmentAddress)
         {
@@ -46,6 +46,9 @@ namespace Shaders
             entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
         }
 
+        /// <summary>
+        /// Creates a new shader+request from the given vertex and fragment data addresses.
+        /// </summary>
         public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
         {
             DataRequest vertex = new(world, vertexAddress);
