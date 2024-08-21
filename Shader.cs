@@ -7,7 +7,7 @@ using Unmanaged.Collections;
 
 namespace Shaders
 {
-    public readonly struct Shader : IShader, IDisposable
+    public readonly struct Shader : IEntity, IDisposable
     {
         private readonly Entity entity;
 
@@ -15,7 +15,6 @@ namespace Shaders
         public readonly ReadOnlySpan<ShaderUniformProperty> UniformProperties => entity.GetList<ShaderUniformProperty>().AsSpan();
         public readonly ReadOnlySpan<ShaderSamplerProperty> SamplerProperties => entity.GetList<ShaderSamplerProperty>().AsSpan();
         public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetList<ShaderPushConstant>().AsSpan();
-        public readonly bool IsLoaded => entity.ContainsComponent<IsShader>();
 
         World IEntity.World => entity.world;
         eint IEntity.Value => entity.value;
@@ -38,8 +37,8 @@ namespace Shaders
         /// </summary>
         public Shader(World world, ReadOnlySpan<char> vertexAddress, ReadOnlySpan<char> fragmentAddress)
         {
-            DataRequest vertex = new(world, vertexAddress);
-            DataRequest fragment = new(world, fragmentAddress);
+            DataEntity vertex = new(world, vertexAddress);
+            DataEntity fragment = new(world, fragmentAddress);
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
@@ -51,8 +50,8 @@ namespace Shaders
         /// </summary>
         public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
         {
-            DataRequest vertex = new(world, vertexAddress);
-            DataRequest fragment = new(world, fragmentAddress);
+            DataEntity vertex = new(world, vertexAddress);
+            DataEntity fragment = new(world, fragmentAddress);
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
