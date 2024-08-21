@@ -16,8 +16,8 @@ namespace Shaders
         public readonly ReadOnlySpan<ShaderSamplerProperty> SamplerProperties => entity.GetList<ShaderSamplerProperty>().AsSpan();
         public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetList<ShaderPushConstant>().AsSpan();
 
-        World IEntity.World => entity.world;
-        eint IEntity.Value => entity.value;
+        World IEntity.World => entity;
+        eint IEntity.Value => entity;
 
 #if NET
         [Obsolete("Default constructor not available", true)]
