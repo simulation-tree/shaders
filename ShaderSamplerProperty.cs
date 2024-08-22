@@ -26,7 +26,7 @@ namespace Shaders
 
         public readonly int ToString(Span<char> buffer)
         {
-            int length = name.CopyTo(buffer);
+            int length = name.ToString(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
             length += key.ToString(buffer[length..]);
