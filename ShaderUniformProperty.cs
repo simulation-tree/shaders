@@ -16,9 +16,6 @@ namespace Shaders
         /// </summary>
         public readonly uint size;
 
-        public readonly byte Binding => key.Binding;
-        public readonly byte Set => key.Set;
-
         public ShaderUniformProperty(FixedString name, DescriptorResourceKey key, uint size)
         {
             this.label = name;
