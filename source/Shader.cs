@@ -37,8 +37,8 @@ namespace Shaders
         /// </summary>
         public Shader(World world, ReadOnlySpan<char> vertexAddress, ReadOnlySpan<char> fragmentAddress)
         {
-            DataEntity vertex = new(world, vertexAddress);
-            DataEntity fragment = new(world, fragmentAddress);
+            DataRequest vertex = new(world, vertexAddress);
+            DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
@@ -50,8 +50,8 @@ namespace Shaders
         /// </summary>
         public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
         {
-            DataEntity vertex = new(world, vertexAddress);
-            DataEntity fragment = new(world, fragmentAddress);
+            DataRequest vertex = new(world, vertexAddress);
+            DataRequest fragment = new(world, fragmentAddress);
             entity = new(world);
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
