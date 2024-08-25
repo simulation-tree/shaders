@@ -11,10 +11,10 @@ namespace Shaders
     {
         private readonly Entity entity;
 
-        public readonly ReadOnlySpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetList<ShaderVertexInputAttribute>().AsSpan();
-        public readonly ReadOnlySpan<ShaderUniformProperty> UniformProperties => entity.GetList<ShaderUniformProperty>().AsSpan();
-        public readonly ReadOnlySpan<ShaderSamplerProperty> SamplerProperties => entity.GetList<ShaderSamplerProperty>().AsSpan();
-        public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetList<ShaderPushConstant>().AsSpan();
+        public readonly ReadOnlySpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetArray<ShaderVertexInputAttribute>();
+        public readonly ReadOnlySpan<ShaderUniformProperty> UniformProperties => entity.GetArray<ShaderUniformProperty>();
+        public readonly ReadOnlySpan<ShaderSamplerProperty> SamplerProperties => entity.GetArray<ShaderSamplerProperty>();
+        public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetArray<ShaderPushConstant>();
 
         World IEntity.World => entity;
         eint IEntity.Value => entity;
@@ -83,14 +83,14 @@ namespace Shaders
         {
             IsShader component = entity.GetComponent<IsShader>();
             Entity vertexShader = entity.GetReference<Entity>(component.vertex);
-            return vertexShader.GetList<byte>().AsSpan();
+            return vertexShader.GetArray<byte>();
         }
 
         public readonly ReadOnlySpan<byte> GetFragmentBytes()
         {
             IsShader component = entity.GetComponent<IsShader>();
             Entity fragmentShader = entity.GetReference<Entity>(component.fragment);
-            return fragmentShader.GetList<byte>().AsSpan();
+            return fragmentShader.GetArray<byte>();
         }
 
         public readonly uint GetMemberCount(ReadOnlySpan<char> uniformProperty)
@@ -100,7 +100,7 @@ namespace Shaders
 
         public readonly uint GetMemberCount(FixedString uniformProperty)
         {
-            UnmanagedList<ShaderUniformPropertyMember> allMembers = entity.GetList<ShaderUniformPropertyMember>();
+            Span<ShaderUniformPropertyMember> allMembers = entity.GetArray<ShaderUniformPropertyMember>();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -120,7 +120,7 @@ namespace Shaders
 
         public readonly ShaderUniformPropertyMember GetMember(FixedString uniformProperty, uint index)
         {
-            UnmanagedList<ShaderUniformPropertyMember> allMembers = entity.GetList<ShaderUniformPropertyMember>();
+            Span<ShaderUniformPropertyMember> allMembers = entity.GetArray<ShaderUniformPropertyMember>();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
