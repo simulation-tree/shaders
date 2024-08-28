@@ -3,11 +3,10 @@ using Shaders.Components;
 using Simulation;
 using System;
 using Unmanaged;
-using Unmanaged.Collections;
 
 namespace Shaders
 {
-    public readonly struct Shader : IEntity, IDisposable
+    public readonly struct Shader : IEntity
     {
         private readonly Entity entity;
 
@@ -56,11 +55,6 @@ namespace Shaders
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
             entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
-        }
-
-        public readonly void Dispose()
-        {
-            entity.Dispose();
         }
 
         public readonly override string ToString()
