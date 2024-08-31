@@ -16,7 +16,7 @@ namespace Shaders
         public readonly ReadOnlySpan<ShaderPushConstant> PushConstants => entity.GetArray<ShaderPushConstant>();
 
         World IEntity.World => entity;
-        eint IEntity.Value => entity;
+        uint IEntity.Value => entity;
 
 #if NET
         [Obsolete("Default constructor not available", true)]
@@ -26,7 +26,7 @@ namespace Shaders
         }
 #endif
 
-        public Shader(World world, eint existingEntity)
+        public Shader(World world, uint existingEntity)
         {
             entity = new(world, existingEntity);
         }
