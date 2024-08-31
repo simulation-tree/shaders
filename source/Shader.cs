@@ -69,20 +69,20 @@ namespace Shaders
 
         public readonly uint GetVersion()
         {
-            IsShader component = entity.GetComponent<IsShader>();
+            IsShader component = entity.GetComponentRef<IsShader>();
             return component.version;
         }
 
         public readonly ReadOnlySpan<byte> GetVertexBytes()
         {
-            IsShader component = entity.GetComponent<IsShader>();
+            IsShader component = entity.GetComponentRef<IsShader>();
             Entity vertexShader = entity.GetReference<Entity>(component.vertex);
             return vertexShader.GetArray<byte>();
         }
 
         public readonly ReadOnlySpan<byte> GetFragmentBytes()
         {
-            IsShader component = entity.GetComponent<IsShader>();
+            IsShader component = entity.GetComponentRef<IsShader>();
             Entity fragmentShader = entity.GetReference<Entity>(component.fragment);
             return fragmentShader.GetArray<byte>();
         }
