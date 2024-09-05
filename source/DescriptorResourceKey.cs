@@ -1,4 +1,5 @@
 ﻿using System;
+using Unmanaged;
 
 namespace Shaders
 {
@@ -27,19 +28,20 @@ namespace Shaders
             value = (byte)(set << 4 | binding);
         }
 
-        public readonly override string ToString()
+        public unsafe readonly override string ToString()
         {
-            Span<char> buffer = stackalloc char[32];
-            int length = ToString(buffer);
-            return new string(buffer[..length]);
+            USpan<char> buffer = stackalloc char[32];
+            uint length = ToString(buffer);
+            return new string(buffer.pointer, 0, (int)length);
         }
 
-        public readonly int ToString(Span<char> buffer)
+        public readonly uint ToString(USpan<char> buffer)
         {
-            Binding.TryFormat(buffer, out int bindingLength);
-            buffer[bindingLength++] = ':';
-            Set.TryFormat(buffer[bindingLength..], out int setLength);
-            return bindingLength + setLength;
+            uint length = 0;
+            length += Binding.ToString(buffer);  
+            buffer[length++] = ':';
+            length += Set.ToString(buffer.Slice(length));
+            return length;
         }
 
         public readonly override bool Equals(object? obj)

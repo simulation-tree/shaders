@@ -23,26 +23,26 @@ namespace Shaders
             this.size = size;
         }
 
-        public ShaderUniformProperty(ReadOnlySpan<char> name, DescriptorResourceKey key, uint size)
+        public ShaderUniformProperty(USpan<char> name, DescriptorResourceKey key, uint size)
         {
             this.label = new(name);
             this.key = key;
             this.size = size;
         }
 
-        public readonly override string ToString()
+        public unsafe readonly override string ToString()
         {
-            Span<char> buffer = stackalloc char[FixedString.MaxLength + 16];
-            int length = ToString(buffer);
-            return new string(buffer[..length]);
+            USpan<char> buffer = stackalloc char[(int)(FixedString.MaxLength + 16)];
+            uint length = ToString(buffer);
+            return new string(buffer.pointer, 0, (int)length);
         }
 
-        public readonly int ToString(Span<char> buffer)
+        public readonly uint ToString(USpan<char> buffer)
         {
-            int length = label.ToString(buffer);
+            uint length = label.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += key.ToString(buffer[length..]);
+            length += key.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }

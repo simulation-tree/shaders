@@ -24,6 +24,15 @@ namespace Shaders
             this.type = type;
         }
 
+        public ShaderVertexInputAttribute(USpan<char> name, byte location, byte binding, byte offset, RuntimeType type)
+        {
+            this.name = new(name);
+            this.location = location;
+            this.binding = binding;
+            this.offset = offset;
+            this.type = type;
+        }
+
         public static ShaderVertexInputAttribute Create<T>(FixedString name, byte location, byte binding, byte offset) where T : unmanaged
         {
             return new(name, location, binding, offset, RuntimeType.Get<T>());

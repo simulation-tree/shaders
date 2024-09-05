@@ -1,5 +1,4 @@
-﻿using System;
-using Unmanaged;
+﻿using Unmanaged;
 
 namespace Shaders
 {
@@ -16,19 +15,19 @@ namespace Shaders
             this.name = name;
         }
 
-        public readonly override string ToString()
+        public unsafe readonly override string ToString()
         {
-            Span<char> buffer = stackalloc char[FixedString.MaxLength + 16];
-            int length = ToString(buffer);
-            return new string(buffer[..length]);
+            USpan<char> buffer = stackalloc char[(int)(FixedString.MaxLength + 16)];
+            uint length = ToString(buffer);
+            return new string(buffer.pointer, 0, (int)length);
         }
 
-        public readonly int ToString(Span<char> buffer)
+        public readonly uint ToString(USpan<char> buffer)
         {
-            int length = name.ToString(buffer);
+            uint length = name.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += type.ToString(buffer[length..]);
+            length += type.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using Unmanaged;
+﻿using Unmanaged;
 
 namespace Shaders
 {
@@ -17,19 +16,25 @@ namespace Shaders
             this.key = key;
         }
 
-        public readonly override string ToString()
+        public ShaderSamplerProperty(USpan<char> name, DescriptorResourceKey key)
         {
-            Span<char> buffer = stackalloc char[name.Length + 32];
-            int length = ToString(buffer);
-            return new string(buffer[..length]);
+            this.name = new(name);
+            this.key = key;
         }
 
-        public readonly int ToString(Span<char> buffer)
+        public unsafe readonly override string ToString()
         {
-            int length = name.ToString(buffer);
+            USpan<char> buffer = stackalloc char[(int)(name.Length + 32)];
+            uint length = ToString(buffer);
+            return new string(buffer.pointer, 0, (int)length);
+        }
+
+        public readonly uint ToString(USpan<char> buffer)
+        {
+            uint length = name.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += key.ToString(buffer[length..]);
+            length += key.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }

@@ -16,5 +16,13 @@ namespace Shaders
             this.offset = offset;
             this.size = size;
         }
+
+        public ShaderPushConstant(USpan<char> propertyName, FixedString memberName, byte offset, byte size)
+        {
+            this.propertyName = new(propertyName);
+            this.memberName = memberName;
+            this.offset = offset;
+            this.size = size;
+        }
     }
 }
