@@ -1,6 +1,6 @@
 {
     "name": "Shaders",
-    "rootNamespace": "",
+    "rootNamespace": "Shaders",
     "references": [
         "GUID:a9fd0dabe3d39ac4fa7aad759409e439",
         "GUID:21cb637cc1e869c469489b37581b0535",
@@ -8,11 +8,11 @@
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": false
+    "noEngineReferences": true
 }
