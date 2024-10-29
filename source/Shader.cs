@@ -15,8 +15,8 @@ namespace Shaders
         public readonly USpan<ShaderSamplerProperty> SamplerProperties => entity.GetArray<ShaderSamplerProperty>();
         public readonly USpan<ShaderPushConstant> PushConstants => entity.GetArray<ShaderPushConstant>();
 
-        readonly uint IEntity.Value => entity.value;
-        readonly World IEntity.World => entity.world;
+        readonly uint IEntity.Value => entity.GetEntityValue();
+        readonly World IEntity.World => entity.GetWorld();
         readonly Definition IEntity.Definition => new Definition().AddComponentType<IsShader>().AddArrayTypes<ShaderVertexInputAttribute, ShaderUniformProperty, ShaderSamplerProperty, ShaderPushConstant, ShaderUniformPropertyMember>();
 
 #if NET
@@ -56,6 +56,11 @@ namespace Shaders
             rint vertexReference = entity.AddReference(vertex);
             rint fragmentReference = entity.AddReference(fragment);
             entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
+        }
+
+        public readonly void Dispose()
+        {
+            entity.Dispose();
         }
 
         public readonly override string ToString()
