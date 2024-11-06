@@ -9,24 +9,27 @@ namespace Shaders
     public readonly struct ShaderUniformProperty
     {
         public readonly FixedString label;
-        public readonly DescriptorResourceKey key;
+        public readonly byte binding;
+        public readonly byte set;
 
         /// <summary>
         /// Size of the uniform buffer object in bytes.
         /// </summary>
         public readonly uint size;
 
-        public ShaderUniformProperty(FixedString name, DescriptorResourceKey key, uint size)
+        public ShaderUniformProperty(FixedString name, byte binding, byte set, uint size)
         {
             this.label = name;
-            this.key = key;
+            this.binding = binding;
+            this.set = set;
             this.size = size;
         }
 
-        public ShaderUniformProperty(USpan<char> name, DescriptorResourceKey key, uint size)
+        public ShaderUniformProperty(USpan<char> name, byte binding, byte set, uint size)
         {
             this.label = new(name);
-            this.key = key;
+            this.binding = binding;
+            this.set = set;
             this.size = size;
         }
 
@@ -42,7 +45,10 @@ namespace Shaders
             uint length = label.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += key.ToString(buffer.Slice(length));
+            length += set.ToString(buffer.Slice(length));
+            buffer[length++] = ',';
+            buffer[length++] = ' ';
+            length += binding.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }

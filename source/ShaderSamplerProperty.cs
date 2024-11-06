@@ -8,18 +8,21 @@ namespace Shaders
     public readonly struct ShaderSamplerProperty
     {
         public readonly FixedString name;
-        public readonly DescriptorResourceKey key;
+        public readonly byte binding;
+        public readonly byte set;
 
-        public ShaderSamplerProperty(FixedString name, DescriptorResourceKey key)
+        public ShaderSamplerProperty(FixedString name, byte binding, byte set)
         {
             this.name = name;
-            this.key = key;
+            this.binding = binding;
+            this.set = set;
         }
 
-        public ShaderSamplerProperty(USpan<char> name, DescriptorResourceKey key)
+        public ShaderSamplerProperty(USpan<char> name, byte binding, byte set)
         {
             this.name = new(name);
-            this.key = key;
+            this.binding = binding;
+            this.set = set;
         }
 
         public unsafe readonly override string ToString()
@@ -34,7 +37,10 @@ namespace Shaders
             uint length = name.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += key.ToString(buffer.Slice(length));
+            length += binding.ToString(buffer.Slice(length));
+            buffer[length++] = ',';
+            buffer[length++] = ' ';
+            length += set.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }
