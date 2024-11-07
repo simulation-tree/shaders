@@ -1,11 +1,12 @@
-﻿using Unmanaged;
+﻿using System;
+using Unmanaged;
 
 namespace Shaders
 {
     /// <summary>
     /// Describes a shader property that references a sampled texture.
     /// </summary>
-    public readonly struct ShaderSamplerProperty
+    public readonly struct ShaderSamplerProperty : IEquatable<ShaderSamplerProperty>
     {
         public readonly FixedString name;
         public readonly byte binding;
@@ -23,6 +24,21 @@ namespace Shaders
             this.name = new(name);
             this.binding = binding;
             this.set = set;
+        }
+
+        public readonly override bool Equals(object? obj)
+        {
+            return obj is ShaderSamplerProperty property && Equals(property);
+        }
+
+        public readonly bool Equals(ShaderSamplerProperty other)
+        {
+            return name.Equals(other.name) && binding == other.binding && set == other.set;
+        }
+
+        public readonly override int GetHashCode()
+        {
+            return HashCode.Combine(name, binding, set);
         }
 
         public unsafe readonly override string ToString()
@@ -43,6 +59,16 @@ namespace Shaders
             length += set.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
+        }
+
+        public static bool operator ==(ShaderSamplerProperty left, ShaderSamplerProperty right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ShaderSamplerProperty left, ShaderSamplerProperty right)
+        {
+            return !(left == right);
         }
     }
 }

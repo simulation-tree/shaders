@@ -6,7 +6,7 @@ namespace Shaders
     /// <summary>
     /// Describes a uniform buffer object shader property.
     /// </summary>
-    public readonly struct ShaderUniformProperty
+    public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
         public readonly FixedString label;
         public readonly byte binding;
@@ -33,6 +33,21 @@ namespace Shaders
             this.size = size;
         }
 
+        public readonly override bool Equals(object? obj)
+        {
+            return obj is ShaderUniformProperty property && Equals(property);
+        }
+
+        public readonly bool Equals(ShaderUniformProperty other)
+        {
+            return label.Equals(other.label) && binding == other.binding && set == other.set && size == other.size;
+        }
+
+        public readonly override int GetHashCode()
+        {
+            return HashCode.Combine(label, binding, set, size);
+        }
+
         public unsafe readonly override string ToString()
         {
             USpan<char> buffer = stackalloc char[(int)(FixedString.Capacity + 16)];
@@ -51,6 +66,16 @@ namespace Shaders
             length += binding.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
+        }
+
+        public static bool operator ==(ShaderUniformProperty left, ShaderUniformProperty right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ShaderUniformProperty left, ShaderUniformProperty right)
+        {
+            return !(left == right);
         }
     }
 }

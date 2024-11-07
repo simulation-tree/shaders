@@ -6,7 +6,7 @@ using Unmanaged;
 
 namespace Shaders
 {
-    public readonly struct Shader : IEntity
+    public readonly struct Shader : IEntity, IEquatable<Shader>
     {
         public readonly Entity entity;
 
@@ -131,6 +131,31 @@ namespace Shaders
             }
 
             throw new IndexOutOfRangeException($"No member found at index {index} for uniform property `{uniformProperty}`");
+        }
+
+        public readonly override bool Equals(object? obj)
+        {
+            return obj is Shader shader && Equals(shader);
+        }
+
+        public readonly bool Equals(Shader other)
+        {
+            return entity.Equals(other.entity);
+        }
+
+        public readonly override int GetHashCode()
+        {
+            return entity.GetHashCode();
+        }
+
+        public static bool operator ==(Shader left, Shader right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Shader left, Shader right)
+        {
+            return !(left == right);
         }
     }
 }
