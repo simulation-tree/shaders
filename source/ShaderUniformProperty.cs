@@ -1,11 +1,13 @@
 ﻿using System;
 using Unmanaged;
+using Worlds;
 
 namespace Shaders
 {
     /// <summary>
     /// Describes a uniform buffer object shader property.
     /// </summary>
+    [Array]
     public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
         public readonly FixedString label;

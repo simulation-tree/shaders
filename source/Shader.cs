@@ -1,14 +1,14 @@
 ﻿using Data;
 using Shaders.Components;
-using Simulation;
 using System;
 using Unmanaged;
+using Worlds;
 
 namespace Shaders
 {
     public readonly struct Shader : IEntity, IEquatable<Shader>
     {
-        public readonly Entity entity;
+        private readonly Entity entity;
 
         public readonly USpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetArray<ShaderVertexInputAttribute>();
         public readonly USpan<ShaderUniformProperty> UniformProperties => entity.GetArray<ShaderUniformProperty>();
@@ -156,6 +156,11 @@ namespace Shaders
         public static bool operator !=(Shader left, Shader right)
         {
             return !(left == right);
+        }
+
+        public static implicit operator Entity(Shader shader)
+        {
+            return shader.entity;
         }
     }
 }

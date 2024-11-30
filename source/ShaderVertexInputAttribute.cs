@@ -1,42 +1,54 @@
 ﻿using System;
 using Unmanaged;
+using Worlds;
 
 namespace Shaders
 {
     /// <summary>
     /// Describes a vertex attribute in the shader's vertex input.
     /// </summary>
+    [Array]
     public readonly struct ShaderVertexInputAttribute : IEquatable<ShaderVertexInputAttribute>
     {
         public readonly FixedString name;
         public readonly byte location;
         public readonly byte binding;
         public readonly byte offset;
-        public readonly RuntimeType type;
+        public readonly nint type;
+        public readonly byte size;
 
-        public readonly ushort Size => type.Size;
+        public readonly Type Type
+        {
+            get
+            {
+                RuntimeTypeHandle handle = RuntimeTypeHandle.FromIntPtr(type);
+                return Type.GetTypeFromHandle(handle) ?? throw new();
+            }
+        }
 
-        public ShaderVertexInputAttribute(FixedString name, byte location, byte binding, byte offset, RuntimeType type)
+        public ShaderVertexInputAttribute(FixedString name, byte location, byte binding, byte offset, Type type, byte size)
         {
             this.name = name;
             this.location = location;
             this.binding = binding;
             this.offset = offset;
-            this.type = type;
+            this.type = RuntimeTypeHandle.ToIntPtr(type.TypeHandle);
+            this.size = size;
         }
 
-        public ShaderVertexInputAttribute(USpan<char> name, byte location, byte binding, byte offset, RuntimeType type)
+        public ShaderVertexInputAttribute(USpan<char> name, byte location, byte binding, byte offset, nint type, byte size)
         {
             this.name = new(name);
             this.location = location;
             this.binding = binding;
             this.offset = offset;
             this.type = type;
+            this.size = size;
         }
 
         public static ShaderVertexInputAttribute Create<T>(FixedString name, byte location, byte binding, byte offset) where T : unmanaged
         {
-            return new(name, location, binding, offset, RuntimeType.Get<T>());
+            return new(name, location, binding, offset, typeof(T), (byte)TypeInfo<T>.size);
         }
 
         public readonly override bool Equals(object? obj)

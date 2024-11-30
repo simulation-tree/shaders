@@ -1,7 +1,8 @@
-﻿using Simulation;
+﻿using Worlds;
 
 namespace Shaders.Components
 {
+    [Component]
     public struct IsShaderRequest
     {
         public uint version;

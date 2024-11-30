@@ -1,18 +1,31 @@
 ﻿using System;
 using Unmanaged;
+using Worlds;
 
 namespace Shaders
 {
+    [Array]
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
         public readonly FixedString label;
-        public readonly RuntimeType type;
+        public readonly nint type;
+        public readonly byte size;
         public readonly FixedString name;
 
-        public ShaderUniformPropertyMember(FixedString label, RuntimeType type, FixedString name)
+        public readonly Type Type
+        {
+            get
+            {
+                RuntimeTypeHandle handle = RuntimeTypeHandle.FromIntPtr(type);
+                return Type.GetTypeFromHandle(handle) ?? throw new();
+            }
+        }
+
+        public ShaderUniformPropertyMember(FixedString label, Type type, byte size, FixedString name)
         {
             this.label = label;
-            this.type = type;
+            this.type = RuntimeTypeHandle.ToIntPtr(type.TypeHandle);
+            this.size = size;
             this.name = name;
         }
 
