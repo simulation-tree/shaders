@@ -1,4 +1,5 @@
 ﻿using Data;
+using Data.Components;
 using Shaders.Components;
 using System;
 using Unmanaged;
@@ -78,14 +79,14 @@ namespace Shaders
         {
             IsShader component = entity.GetComponentRef<IsShader>();
             Entity vertexShader = entity.GetReference<Entity>(component.vertex);
-            return vertexShader.GetArray<byte>();
+            return vertexShader.GetArray<BinaryData>().As<byte>();
         }
 
         public readonly USpan<byte> GetFragmentBytes()
         {
             IsShader component = entity.GetComponentRef<IsShader>();
             Entity fragmentShader = entity.GetReference<Entity>(component.fragment);
-            return fragmentShader.GetArray<byte>();
+            return fragmentShader.GetArray<BinaryData>().As<byte>();
         }
 
         public readonly uint GetMemberCount(USpan<char> uniformProperty)
