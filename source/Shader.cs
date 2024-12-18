@@ -78,15 +78,15 @@ namespace Shaders
         public readonly USpan<byte> GetVertexBytes()
         {
             IsShader component = entity.GetComponent<IsShader>();
-            Entity vertexShader = entity.GetReference<Entity>(component.vertex);
-            return vertexShader.GetArray<BinaryData>().As<byte>();
+            uint vertexEntity = entity.GetReference(component.vertex);
+            return entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
         }
 
         public readonly USpan<byte> GetFragmentBytes()
         {
             IsShader component = entity.GetComponent<IsShader>();
-            Entity fragmentShader = entity.GetReference<Entity>(component.fragment);
-            return fragmentShader.GetArray<BinaryData>().As<byte>();
+            uint fragmentEntity = entity.GetReference(component.fragment);
+            return entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
         }
 
         public readonly uint GetMemberCount(USpan<char> uniformProperty)
