@@ -18,7 +18,11 @@ namespace Shaders
 
         readonly uint IEntity.Value => entity.GetEntityValue();
         readonly World IEntity.World => entity.GetWorld();
-        readonly Definition IEntity.Definition => new Definition().AddComponentType<IsShader>().AddArrayTypes<ShaderVertexInputAttribute, ShaderUniformProperty, ShaderSamplerProperty, ShaderPushConstant, ShaderUniformPropertyMember>();
+
+        readonly Definition IEntity.GetDefinition(Schema schema)
+        {
+            return new Definition().AddComponentType<IsShader>(schema).AddArrayTypes<ShaderVertexInputAttribute, ShaderUniformProperty, ShaderSamplerProperty, ShaderPushConstant, ShaderUniformPropertyMember>(schema);
+        }
 
 #if NET
         [Obsolete("Default constructor not available", true)]
