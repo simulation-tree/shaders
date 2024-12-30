@@ -3,7 +3,7 @@ using Worlds;
 
 namespace Shaders
 {
-    [Array]
+    [ArrayElement]
     public readonly struct ShaderPushConstant
     {
         public readonly FixedString propertyName;

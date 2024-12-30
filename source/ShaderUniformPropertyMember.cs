@@ -4,7 +4,7 @@ using Worlds;
 
 namespace Shaders
 {
-    [Array]
+    [ArrayElement]
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
         public readonly FixedString label;

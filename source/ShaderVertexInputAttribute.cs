@@ -7,7 +7,7 @@ namespace Shaders
     /// <summary>
     /// Describes a vertex attribute in the shader's vertex input.
     /// </summary>
-    [Array]
+    [ArrayElement]
     public readonly struct ShaderVertexInputAttribute : IEquatable<ShaderVertexInputAttribute>
     {
         public readonly FixedString name;

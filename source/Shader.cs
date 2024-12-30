@@ -21,7 +21,7 @@ namespace Shaders
 
         readonly Definition IEntity.GetDefinition(Schema schema)
         {
-            return new Definition().AddComponentType<IsShader>(schema).AddArrayTypes<ShaderVertexInputAttribute, ShaderUniformProperty, ShaderSamplerProperty, ShaderPushConstant, ShaderUniformPropertyMember>(schema);
+            return new Definition().AddComponentType<IsShader>(schema).AddArrayElementTypes<ShaderVertexInputAttribute, ShaderUniformProperty, ShaderSamplerProperty, ShaderPushConstant, ShaderUniformPropertyMember>(schema);
         }
 
 #if NET

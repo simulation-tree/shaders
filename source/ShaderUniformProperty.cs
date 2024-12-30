@@ -7,7 +7,7 @@ namespace Shaders
     /// <summary>
     /// Describes a uniform buffer object shader property.
     /// </summary>
-    [Array]
+    [ArrayElement]
     public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
         public readonly FixedString label;

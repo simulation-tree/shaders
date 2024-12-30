@@ -7,7 +7,7 @@ namespace Shaders
     /// <summary>
     /// Describes a shader property that references a sampled texture.
     /// </summary>
-    [Array]
+    [ArrayElement]
     public readonly struct ShaderSamplerProperty : IEquatable<ShaderSamplerProperty>
     {
         public readonly FixedString name;
