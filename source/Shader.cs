@@ -11,6 +11,44 @@ namespace Shaders
     {
         private readonly Entity entity;
 
+        public readonly USpan<byte> VertexBytes
+        {
+            get
+            {
+                IsShader component = entity.GetComponent<IsShader>();
+                uint vertexEntity = entity.GetReference(component.vertex);
+                return entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
+            }
+        }
+
+        public readonly USpan<byte> FragmentBytes
+        {
+            get
+            {
+                IsShader component = entity.GetComponent<IsShader>();
+                uint fragmentEntity = entity.GetReference(component.fragment);
+                return entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
+            }
+        }
+
+        public readonly Entity Vertex
+        {
+            get
+            {
+                IsShader component = entity.GetComponent<IsShader>();
+                return new(entity.GetWorld(), entity.GetReference(component.vertex));
+            }
+        }
+
+        public readonly Entity Fragment
+        {
+            get
+            {
+                IsShader component = entity.GetComponent<IsShader>();
+                return new(entity.GetWorld(), entity.GetReference(component.fragment));
+            }
+        }
+
         public readonly USpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetArray<ShaderVertexInputAttribute>();
         public readonly USpan<ShaderUniformProperty> UniformProperties => entity.GetArray<ShaderUniformProperty>();
         public readonly USpan<ShaderSamplerProperty> SamplerProperties => entity.GetArray<ShaderSamplerProperty>();
@@ -40,27 +78,13 @@ namespace Shaders
         /// <summary>
         /// Creates a new shader+request from the given vertex and fragment data addresses.
         /// </summary>
-        public Shader(World world, USpan<char> vertexAddress, USpan<char> fragmentAddress)
+        public Shader(World world, Address vertexAddress, Address fragmentAddress)
         {
             DataRequest vertex = new(world, vertexAddress);
             DataRequest fragment = new(world, fragmentAddress);
-            entity = new(world);
-            rint vertexReference = entity.AddReference(vertex);
-            rint fragmentReference = entity.AddReference(fragment);
-            entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
-        }
-
-        /// <summary>
-        /// Creates a new shader+request from the given vertex and fragment data addresses.
-        /// </summary>
-        public Shader(World world, FixedString vertexAddress, FixedString fragmentAddress)
-        {
-            DataRequest vertex = new(world, vertexAddress);
-            DataRequest fragment = new(world, fragmentAddress);
-            entity = new(world);
-            rint vertexReference = entity.AddReference(vertex);
-            rint fragmentReference = entity.AddReference(fragment);
-            entity.AddComponent(new IsShaderRequest(vertexReference, fragmentReference));
+            entity = new Entity<IsShaderRequest>(world, new IsShaderRequest((rint)1, (rint)2));
+            entity.AddReference(vertex);
+            entity.AddReference(fragment);
         }
 
         public readonly void Dispose()
@@ -77,20 +101,6 @@ namespace Shaders
         {
             IsShader component = entity.GetComponent<IsShader>();
             return component.version;
-        }
-
-        public readonly USpan<byte> GetVertexBytes()
-        {
-            IsShader component = entity.GetComponent<IsShader>();
-            uint vertexEntity = entity.GetReference(component.vertex);
-            return entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
-        }
-
-        public readonly USpan<byte> GetFragmentBytes()
-        {
-            IsShader component = entity.GetComponent<IsShader>();
-            uint fragmentEntity = entity.GetReference(component.fragment);
-            return entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
         }
 
         public readonly uint GetMemberCount(USpan<char> uniformProperty)
