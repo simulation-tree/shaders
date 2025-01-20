@@ -15,7 +15,7 @@ namespace Shaders
         {
             get
             {
-                IsShader component = entity.GetComponent<IsShader>();
+                ref IsShader component = ref entity.GetComponent<IsShader>();
                 uint vertexEntity = entity.GetReference(component.vertex);
                 return entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
             }
@@ -25,7 +25,7 @@ namespace Shaders
         {
             get
             {
-                IsShader component = entity.GetComponent<IsShader>();
+                ref IsShader component = ref entity.GetComponent<IsShader>();
                 uint fragmentEntity = entity.GetReference(component.fragment);
                 return entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
             }
@@ -35,7 +35,7 @@ namespace Shaders
         {
             get
             {
-                IsShader component = entity.GetComponent<IsShader>();
+                ref IsShader component = ref entity.GetComponent<IsShader>();
                 return new(entity.GetWorld(), entity.GetReference(component.vertex));
             }
         }
@@ -44,7 +44,7 @@ namespace Shaders
         {
             get
             {
-                IsShader component = entity.GetComponent<IsShader>();
+                ref IsShader component = ref entity.GetComponent<IsShader>();
                 return new(entity.GetWorld(), entity.GetReference(component.fragment));
             }
         }
@@ -104,7 +104,17 @@ namespace Shaders
 
         public readonly uint GetVersion()
         {
-            IsShader component = entity.GetComponent<IsShader>();
+            ref IsShader component = ref entity.GetComponent<IsShader>();
+            return component.version;
+        }
+
+        public readonly uint GetBytes(out USpan<byte> vertex, out USpan<byte> fragment)
+        {
+            ref IsShader component = ref entity.GetComponent<IsShader>();
+            uint vertexEntity = entity.GetReference(component.vertex);
+            uint fragmentEntity = entity.GetReference(component.fragment);
+            vertex = entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
+            fragment = entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
             return component.version;
         }
 
