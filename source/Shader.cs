@@ -75,13 +75,8 @@ namespace Shaders
         }
 #endif
 
-        public Shader(World world, uint existingEntity)
-        {
-            entity = new(world, existingEntity);
-        }
-
         /// <summary>
-        /// Creates a new shader+request from the given vertex and fragment data addresses.
+        /// Creates a new request to load a shader from the given addresses.
         /// </summary>
         public Shader(World world, Address vertexAddress, Address fragmentAddress)
         {
@@ -90,6 +85,25 @@ namespace Shaders
             entity = new Entity<IsShaderRequest>(world, new IsShaderRequest((rint)1, (rint)2));
             entity.AddReference(vertex);
             entity.AddReference(fragment);
+        }
+
+        /// <summary>
+        /// Creates a new empty shader.
+        /// </summary>
+        public Shader(World world)
+        {
+            entity = new Entity<IsShader>(world, new IsShader((rint)1, (rint)2));
+            uint vertex = world.CreateEntity();
+            uint fragment = world.CreateEntity();
+            world.CreateArray<BinaryData>(vertex);
+            world.CreateArray<BinaryData>(fragment);
+            entity.AddReference(vertex);
+            entity.AddReference(fragment);
+            entity.CreateArray<ShaderVertexInputAttribute>();
+            entity.CreateArray<ShaderUniformProperty>();
+            entity.CreateArray<ShaderSamplerProperty>();
+            entity.CreateArray<ShaderPushConstant>();
+            entity.CreateArray<ShaderUniformPropertyMember>();
         }
 
         public readonly void Dispose()
@@ -118,11 +132,17 @@ namespace Shaders
             return component.version;
         }
 
+        /// <summary>
+        /// Retrieves how many members the property with the name <paramref name="uniformProperty"/> contains.
+        /// </summary>
         public readonly uint GetMemberCount(USpan<char> uniformProperty)
         {
             return GetMemberCount(new FixedString(uniformProperty));
         }
 
+        /// <summary>
+        /// Retrieves how many members the property with the name <paramref name="uniformProperty"/> contains.
+        /// </summary>
         public readonly uint GetMemberCount(FixedString uniformProperty)
         {
             USpan<ShaderUniformPropertyMember> allMembers = entity.GetArray<ShaderUniformPropertyMember>();
