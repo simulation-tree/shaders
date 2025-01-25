@@ -46,9 +46,9 @@ namespace Shaders
             this.size = size;
         }
 
-        public static ShaderVertexInputAttribute Create<T>(FixedString name, byte location, byte binding, byte offset) where T : unmanaged
+        public unsafe static ShaderVertexInputAttribute Create<T>(FixedString name, byte location, byte binding, byte offset) where T : unmanaged
         {
-            return new(name, location, binding, offset, typeof(T), (byte)TypeInfo<T>.size);
+            return new(name, location, binding, offset, typeof(T), (byte)sizeof(T));
         }
 
         public readonly override bool Equals(object? obj)
