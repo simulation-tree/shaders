@@ -1,10 +1,10 @@
 ﻿using Types;
-using Unmanaged.Tests;
 using Worlds;
+using Worlds.Tests;
 
 namespace Shaders.Tests
 {
-    public abstract class ShaderTests : UnmanagedTests
+    public abstract class ShaderTests : WorldTests
     {
         static ShaderTests()
         {
@@ -12,17 +12,12 @@ namespace Shaders.Tests
             TypeRegistry.Load<Data.TypeBank>();
         }
 
-        protected virtual Schema CreateSchema()
+        protected override Schema CreateSchema()
         {
-            Schema schema = new();
+            Schema schema = base.CreateSchema();
             schema.Load<Shaders.SchemaBank>();
             schema.Load<Data.SchemaBank>();
             return schema;
-        }
-
-        protected virtual World CreateWorld()
-        {
-            return new(CreateSchema());
         }
     }
 }
