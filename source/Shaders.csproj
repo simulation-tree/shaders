@@ -8,7 +8,7 @@
 		<Title>Shaders</Title>
 		<Authors>popcron</Authors>
 		<Company>game-simulations</Company>
-		<RepositoryUrl>https://github.com/game-simulations/shader</RepositoryUrl>
+		<RepositoryUrl>https://github.com/game-simulations/shaders</RepositoryUrl>
 		<IsAotCompatible>True</IsAotCompatible>
 		<IsTrimmable>True</IsTrimmable>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
