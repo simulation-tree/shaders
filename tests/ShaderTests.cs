@@ -1,4 +1,5 @@
-﻿using Types;
+﻿using Data;
+using Types;
 using Worlds;
 using Worlds.Tests;
 
@@ -8,15 +9,15 @@ namespace Shaders.Tests
     {
         static ShaderTests()
         {
-            TypeRegistry.Load<Shaders.TypeBank>();
-            TypeRegistry.Load<Data.Core.TypeBank>();
+            TypeRegistry.Load<ShadersTypeBank>();
+            TypeRegistry.Load<DataTypeBank>();
         }
 
         protected override Schema CreateSchema()
         {
             Schema schema = base.CreateSchema();
-            schema.Load<Shaders.SchemaBank>();
-            schema.Load<Data.Core.SchemaBank>();
+            schema.Load<ShadersSchemaBank>();
+            schema.Load<DataSchemaBank>();
             return schema;
         }
     }
