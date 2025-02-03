@@ -1,135 +1,112 @@
-﻿using Data;
-using Data.Components;
-using Shaders.Components;
+﻿using Shaders.Components;
 using System;
+using System.Diagnostics;
 using Unmanaged;
 using Worlds;
 
 namespace Shaders
 {
-    public readonly struct Shader : IEntity, IEquatable<Shader>
+    public readonly partial struct Shader : IEntity
     {
-        private readonly Entity entity;
-
-        public readonly USpan<byte> VertexBytes
+        public readonly bool IsLoaded
         {
             get
             {
-                ref IsShader component = ref entity.GetComponent<IsShader>();
-                uint vertexEntity = entity.GetReference(component.vertex);
-                return entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
+                if (TryGetComponent(out IsShaderRequest request))
+                {
+                    return request.status == IsShaderRequest.Status.Loaded;
+                }
+
+                return IsCompliant;
             }
         }
 
-        public readonly USpan<byte> FragmentBytes
+        public readonly ShaderType Type
         {
             get
             {
-                ref IsShader component = ref entity.GetComponent<IsShader>();
-                uint fragmentEntity = entity.GetReference(component.fragment);
-                return entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
+                ThrowIfNotLoaded();
+
+                return GetComponent<IsShader>().type;
             }
         }
 
-        public readonly Entity Vertex
+        public readonly USpan<byte> Bytes
         {
             get
             {
-                ref IsShader component = ref entity.GetComponent<IsShader>();
-                return new(entity.GetWorld(), entity.GetReference(component.vertex));
+                ThrowIfNotLoaded();
+
+                return GetArray<ShaderByte>().As<byte>();
             }
         }
 
-        public readonly Entity Fragment
+        public readonly USpan<ShaderVertexInputAttribute> VertexInputAttributes
         {
             get
             {
-                ref IsShader component = ref entity.GetComponent<IsShader>();
-                return new(entity.GetWorld(), entity.GetReference(component.fragment));
+                ThrowIfNotLoaded();
+
+                return GetArray<ShaderVertexInputAttribute>();
             }
         }
 
-        public readonly USpan<ShaderVertexInputAttribute> VertexAttributes => entity.GetArray<ShaderVertexInputAttribute>();
-        public readonly USpan<ShaderUniformProperty> UniformProperties => entity.GetArray<ShaderUniformProperty>();
-        public readonly USpan<ShaderSamplerProperty> SamplerProperties => entity.GetArray<ShaderSamplerProperty>();
-        public readonly USpan<ShaderPushConstant> PushConstants => entity.GetArray<ShaderPushConstant>();
+        public readonly USpan<ShaderUniformProperty> UniformProperties
+        {
+            get
+            {
+                ThrowIfNotLoaded();
 
-        readonly uint IEntity.Value => entity.GetEntityValue();
-        readonly World IEntity.World => entity.GetWorld();
+                return GetArray<ShaderUniformProperty>();
+            }
+        }
+
+        public readonly USpan<ShaderSamplerProperty> SamplerProperties
+        {
+            get
+            {
+                ThrowIfNotLoaded();
+
+                return GetArray<ShaderSamplerProperty>();
+            }
+        }
+
+        public readonly USpan<ShaderPushConstant> PushConstants
+        {
+            get
+            {
+                ThrowIfNotLoaded();
+
+                return GetArray<ShaderPushConstant>();
+            }
+        }
+
+        /// <summary>
+        /// Creates an empty shader entity.
+        /// </summary>
+        public Shader(World world, ShaderType type)
+        {
+            this.world = world;
+            value = world.CreateEntity(new IsShader(0, type));
+            world.CreateArray<ShaderVertexInputAttribute>(value);
+            world.CreateArray<ShaderUniformProperty>(value);
+            world.CreateArray<ShaderSamplerProperty>(value);
+            world.CreateArray<ShaderPushConstant>(value);
+            world.CreateArray<ShaderUniformPropertyMember>(value);
+        }
+
+        /// <summary>
+        /// Creates a request to load a shader from the given <paramref name="address"/>.
+        /// </summary>
+        public Shader(World world, FixedString address, ShaderType type, TimeSpan timeout = default)
+        {
+            this.world = world;
+            value = world.CreateEntity(new IsShaderRequest(type, address, timeout));
+        }
 
         readonly void IEntity.Describe(ref Archetype archetype)
         {
             archetype.AddComponentType<IsShader>();
-            archetype.AddArrayElementType<ShaderVertexInputAttribute>();
-            archetype.AddArrayElementType<ShaderUniformProperty>();
-            archetype.AddArrayElementType<ShaderSamplerProperty>();
-            archetype.AddArrayElementType<ShaderPushConstant>();
-            archetype.AddArrayElementType<ShaderUniformPropertyMember>();
-        }
-
-#if NET
-        [Obsolete("Default constructor not available", true)]
-        public Shader()
-        {
-            throw new InvalidOperationException("Cannot create a shader without a world.");
-        }
-#endif
-
-        /// <summary>
-        /// Creates a new request to load a shader from the given addresses.
-        /// </summary>
-        public Shader(World world, Address vertexAddress, Address fragmentAddress)
-        {
-            DataRequest vertex = new(world, vertexAddress);
-            DataRequest fragment = new(world, fragmentAddress);
-            entity = new Entity<IsShaderRequest>(world, new IsShaderRequest((rint)1, (rint)2));
-            entity.AddReference(vertex);
-            entity.AddReference(fragment);
-        }
-
-        /// <summary>
-        /// Creates a new empty shader.
-        /// </summary>
-        public Shader(World world)
-        {
-            entity = new Entity<IsShader>(world, new IsShader((rint)1, (rint)2));
-            uint vertex = world.CreateEntity();
-            uint fragment = world.CreateEntity();
-            world.CreateArray<BinaryData>(vertex);
-            world.CreateArray<BinaryData>(fragment);
-            entity.AddReference(vertex);
-            entity.AddReference(fragment);
-            entity.CreateArray<ShaderVertexInputAttribute>();
-            entity.CreateArray<ShaderUniformProperty>();
-            entity.CreateArray<ShaderSamplerProperty>();
-            entity.CreateArray<ShaderPushConstant>();
-            entity.CreateArray<ShaderUniformPropertyMember>();
-        }
-
-        public readonly void Dispose()
-        {
-            entity.Dispose();
-        }
-
-        public readonly override string ToString()
-        {
-            return entity.ToString();
-        }
-
-        public readonly uint GetVersion()
-        {
-            ref IsShader component = ref entity.GetComponent<IsShader>();
-            return component.version;
-        }
-
-        public readonly uint GetBytes(out USpan<byte> vertex, out USpan<byte> fragment)
-        {
-            ref IsShader component = ref entity.GetComponent<IsShader>();
-            uint vertexEntity = entity.GetReference(component.vertex);
-            uint fragmentEntity = entity.GetReference(component.fragment);
-            vertex = entity.GetWorld().GetArray<BinaryData>(vertexEntity).As<byte>();
-            fragment = entity.GetWorld().GetArray<BinaryData>(fragmentEntity).As<byte>();
-            return component.version;
         }
 
         /// <summary>
@@ -145,7 +122,9 @@ namespace Shaders
         /// </summary>
         public readonly uint GetMemberCount(FixedString uniformProperty)
         {
-            USpan<ShaderUniformPropertyMember> allMembers = entity.GetArray<ShaderUniformPropertyMember>();
+            ThrowIfNotLoaded();
+
+            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -165,7 +144,9 @@ namespace Shaders
 
         public readonly ShaderUniformPropertyMember GetMember(FixedString uniformProperty, uint index)
         {
-            USpan<ShaderUniformPropertyMember> allMembers = entity.GetArray<ShaderUniformPropertyMember>();
+            ThrowIfNotLoaded();
+
+            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -183,34 +164,13 @@ namespace Shaders
             throw new IndexOutOfRangeException($"No member found at index {index} for uniform property `{uniformProperty}`");
         }
 
-        public readonly override bool Equals(object? obj)
+        [Conditional("DEBUG")]
+        private readonly void ThrowIfNotLoaded()
         {
-            return obj is Shader shader && Equals(shader);
-        }
-
-        public readonly bool Equals(Shader other)
-        {
-            return entity.Equals(other.entity);
-        }
-
-        public readonly override int GetHashCode()
-        {
-            return entity.GetHashCode();
-        }
-
-        public static bool operator ==(Shader left, Shader right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Shader left, Shader right)
-        {
-            return !(left == right);
-        }
-
-        public static implicit operator Entity(Shader shader)
-        {
-            return shader.entity;
+            if (!IsLoaded)
+            {
+                throw new InvalidOperationException($"Shader `{value}` is not loaded");
+            }
         }
     }
 }

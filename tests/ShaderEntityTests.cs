@@ -8,9 +8,9 @@ namespace Shaders.Tests
         public void VerifyShaderProperties()
         {
             using World world = CreateWorld();
-            Shader a = new(world);
+            Shader a = new(world, ShaderType.Vertex);
 
-            Assert.That(a.Is(), Is.True);
+            Assert.That(a.IsCompliant, Is.True);
         }
     }
 }

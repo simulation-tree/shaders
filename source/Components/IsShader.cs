@@ -3,24 +3,20 @@
 namespace Shaders.Components
 {
     [Component]
-    public struct IsShader
+    public readonly struct IsShader
     {
-        public rint vertex;
-        public rint fragment;
-        public uint version;
+        public readonly uint version;
+        public readonly ShaderType type;
 
-        public IsShader(rint vertex, rint fragment)
+        public IsShader(uint version, ShaderType type)
         {
-            this.version = default;
-            this.vertex = vertex;
-            this.fragment = fragment;
+            this.version = version;
+            this.type = type;
         }
 
-        public IsShader(rint vertex, rint fragment, uint version)
+        public readonly IsShader IncrementVersion()
         {
-            this.vertex = vertex;
-            this.fragment = fragment;
-            this.version = version;
+            return new IsShader(version + 1, type);
         }
     }
 }
