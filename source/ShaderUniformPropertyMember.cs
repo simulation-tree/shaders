@@ -16,7 +16,7 @@ namespace Shaders
         {
             get
             {
-                RuntimeTypeHandle handle = RuntimeTypeHandle.FromIntPtr(type);
+                RuntimeTypeHandle handle = RuntimeTypeTable.GetHandle(type);
                 return Type.GetTypeFromHandle(handle) ?? throw new();
             }
         }
@@ -24,7 +24,7 @@ namespace Shaders
         public ShaderUniformPropertyMember(FixedString label, Type type, byte size, FixedString name)
         {
             this.label = label;
-            this.type = RuntimeTypeHandle.ToIntPtr(type.TypeHandle);
+            this.type = RuntimeTypeTable.GetAddress(type);
             this.size = size;
             this.name = name;
         }

@@ -21,7 +21,7 @@ namespace Shaders
         {
             get
             {
-                RuntimeTypeHandle handle = RuntimeTypeHandle.FromIntPtr(type);
+                RuntimeTypeHandle handle = RuntimeTypeTable.GetHandle(type);
                 return Type.GetTypeFromHandle(handle) ?? throw new();
             }
         }
@@ -32,7 +32,7 @@ namespace Shaders
             this.location = location;
             this.binding = binding;
             this.offset = offset;
-            this.type = RuntimeTypeHandle.ToIntPtr(type.TypeHandle);
+            this.type = RuntimeTypeTable.GetAddress(type);
             this.size = size;
         }
 
