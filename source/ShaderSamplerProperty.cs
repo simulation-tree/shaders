@@ -45,7 +45,7 @@ namespace Shaders
 
         public unsafe readonly override string ToString()
         {
-            USpan<char> buffer = stackalloc char[(int)(name.Length + 32)];
+            USpan<char> buffer = stackalloc char[name.Length + 32];
             uint length = ToString(buffer);
             return buffer.Slice(0, length).ToString();
         }
