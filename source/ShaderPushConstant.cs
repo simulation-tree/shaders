@@ -1,9 +1,7 @@
 ﻿using Unmanaged;
-using Worlds;
 
 namespace Shaders
 {
-    [ArrayElement]
     public readonly struct ShaderPushConstant
     {
         public readonly FixedString propertyName;

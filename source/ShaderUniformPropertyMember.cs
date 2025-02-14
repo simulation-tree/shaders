@@ -1,10 +1,8 @@
 ﻿using System;
 using Unmanaged;
-using Worlds;
 
 namespace Shaders
 {
-    [ArrayElement]
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
         public readonly FixedString label;

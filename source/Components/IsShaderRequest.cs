@@ -1,10 +1,8 @@
 ﻿using System;
 using Unmanaged;
-using Worlds;
 
 namespace Shaders.Components
 {
-    [Component]
     public struct IsShaderRequest
     {
         public readonly ShaderType type;

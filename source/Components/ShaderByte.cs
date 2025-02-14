@@ -1,8 +1,5 @@
-﻿using Worlds;
-
-namespace Shaders.Components
+﻿namespace Shaders.Components
 {
-    [ArrayElement]
     public readonly struct ShaderByte
     {
         private readonly byte value;

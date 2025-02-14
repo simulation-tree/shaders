@@ -1,8 +1,5 @@
-﻿using Worlds;
-
-namespace Shaders.Components
+﻿namespace Shaders.Components
 {
-    [Component]
     public readonly struct IsShader
     {
         public readonly uint version;
