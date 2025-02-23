@@ -2,6 +2,7 @@
 {
     public enum ShaderType : byte
     {
+        Unknown,
         Vertex,
         Fragment,
         Compute,
