@@ -37,7 +37,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderByte>().As<byte>();
+                return GetArray<ShaderByte>().AsSpan<byte>();
             }
         }
 
@@ -47,7 +47,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderVertexInputAttribute>();
+                return GetArray<ShaderVertexInputAttribute>().AsSpan();
             }
         }
 
@@ -57,7 +57,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderUniformProperty>();
+                return GetArray<ShaderUniformProperty>().AsSpan();
             }
         }
 
@@ -67,7 +67,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderSamplerProperty>();
+                return GetArray<ShaderSamplerProperty>().AsSpan();
             }
         }
 
@@ -77,7 +77,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderPushConstant>();
+                return GetArray<ShaderPushConstant>().AsSpan();
             }
         }
 
@@ -124,7 +124,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
+            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -146,7 +146,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
+            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
