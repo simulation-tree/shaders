@@ -41,6 +41,17 @@ namespace Shaders
             }
         }
 
+        public readonly bool IsInstanced
+        {
+            get
+            {
+                ThrowIfNotLoaded();
+
+                ShaderFlags flags = GetComponent<IsShader>().flags;
+                return (flags & ShaderFlags.Instanced) == ShaderFlags.Instanced;
+            }
+        }
+
         public readonly USpan<ShaderVertexInputAttribute> VertexInputAttributes
         {
             get
@@ -87,7 +98,7 @@ namespace Shaders
         public Shader(World world, ShaderType type)
         {
             this.world = world;
-            value = world.CreateEntity(new IsShader(0, type));
+            value = world.CreateEntity(new IsShader(1, type, ShaderFlags.None));
             world.CreateArray<ShaderVertexInputAttribute>(value);
             world.CreateArray<ShaderUniformProperty>(value);
             world.CreateArray<ShaderSamplerProperty>(value);

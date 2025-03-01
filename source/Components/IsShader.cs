@@ -6,11 +6,13 @@ namespace Shaders.Components
     {
         public readonly uint version;
         public readonly ShaderType type;
+        public readonly ShaderFlags flags;
 
-        public IsShader(uint version, ShaderType type)
+        public IsShader(uint version, ShaderType type, ShaderFlags flags)
         {
             this.version = version;
             this.type = type;
+            this.flags = flags;
         }
 
         public readonly override bool Equals(object? obj)
@@ -30,7 +32,12 @@ namespace Shaders.Components
 
         public readonly IsShader IncrementVersion()
         {
-            return new IsShader(version + 1, type);
+            return new IsShader(version + 1, type, flags);
+        }
+
+        public readonly IsShader IncrementVersion(ShaderFlags flags)
+        {
+            return new IsShader(version + 1, type, flags);
         }
 
         public static bool operator ==(IsShader left, IsShader right)
