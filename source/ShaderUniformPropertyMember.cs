@@ -1,4 +1,5 @@
 ﻿using System;
+using Types;
 using Unmanaged;
 
 namespace Shaders
@@ -6,23 +7,16 @@ namespace Shaders
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
         public readonly FixedString label;
-        public readonly nint type;
+        public readonly long typeHash;
         public readonly byte size;
         public readonly FixedString name;
 
-        public readonly Type Type
-        {
-            get
-            {
-                RuntimeTypeHandle handle = RuntimeTypeTable.GetHandle(type);
-                return Type.GetTypeFromHandle(handle) ?? throw new();
-            }
-        }
+        public readonly TypeLayout Type => TypeRegistry.Get(typeHash);
 
-        public ShaderUniformPropertyMember(FixedString label, Type type, byte size, FixedString name)
+        public ShaderUniformPropertyMember(FixedString label, TypeLayout type, byte size, FixedString name)
         {
             this.label = label;
-            this.type = RuntimeTypeTable.GetAddress(type);
+            this.typeHash = type.Hash;
             this.size = size;
             this.name = name;
         }
@@ -34,15 +28,15 @@ namespace Shaders
 
         public readonly bool Equals(ShaderUniformPropertyMember other)
         {
-            return label.Equals(other.label) && type.Equals(other.type) && name.Equals(other.name);
+            return label.Equals(other.label) && typeHash.Equals(other.typeHash) && name.Equals(other.name);
         }
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(label, type, name);
+            return HashCode.Combine(label, typeHash, name);
         }
 
-        public unsafe readonly override string ToString()
+        public readonly override string ToString()
         {
             USpan<char> buffer = stackalloc char[name.Length + 32];
             uint length = ToString(buffer);
@@ -54,7 +48,7 @@ namespace Shaders
             uint length = name.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
-            length += type.ToString(buffer.Slice(length));
+            length += Type.ToString(buffer.Slice(length));
             buffer[length++] = ')';
             return length;
         }
