@@ -9,7 +9,7 @@ namespace Shaders
     /// </summary>
     public readonly struct ShaderVertexInputAttribute : IEquatable<ShaderVertexInputAttribute>
     {
-        public readonly FixedString name;
+        public readonly ASCIIText256 name;
         public readonly byte location;
         public readonly byte binding;
         public readonly byte offset;
@@ -18,7 +18,7 @@ namespace Shaders
 
         public readonly TypeLayout Type => TypeRegistry.Get(typeHash);
 
-        public ShaderVertexInputAttribute(FixedString name, byte location, byte binding, byte offset, TypeLayout type, byte size)
+        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, TypeLayout type, byte size)
         {
             this.name = name;
             this.location = location;
@@ -38,7 +38,7 @@ namespace Shaders
             this.size = size;
         }
 
-        public unsafe static ShaderVertexInputAttribute Create<T>(FixedString name, byte location, byte binding, byte offset) where T : unmanaged
+        public unsafe static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, byte location, byte binding, byte offset) where T : unmanaged
         {
             TypeLayout type = TypeRegistry.Get<T>();
             return new(name, location, binding, offset, type, (byte)sizeof(T));

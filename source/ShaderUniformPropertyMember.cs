@@ -6,14 +6,14 @@ namespace Shaders
 {
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
-        public readonly FixedString label;
+        public readonly ASCIIText256 label;
         public readonly long typeHash;
         public readonly byte size;
-        public readonly FixedString name;
+        public readonly ASCIIText256 name;
 
         public readonly TypeLayout Type => TypeRegistry.Get(typeHash);
 
-        public ShaderUniformPropertyMember(FixedString label, TypeLayout type, byte size, FixedString name)
+        public ShaderUniformPropertyMember(ASCIIText256 label, TypeLayout type, byte size, ASCIIText256 name)
         {
             this.label = label;
             this.typeHash = type.Hash;

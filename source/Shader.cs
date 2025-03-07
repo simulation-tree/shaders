@@ -109,7 +109,7 @@ namespace Shaders
         /// <summary>
         /// Creates a request to load a shader from the given <paramref name="address"/>.
         /// </summary>
-        public Shader(World world, FixedString address, ShaderType type, TimeSpan timeout = default)
+        public Shader(World world, ASCIIText256 address, ShaderType type, TimeSpan timeout = default)
         {
             this.world = world;
             value = world.CreateEntity(new IsShaderRequest(type, address, timeout));
@@ -125,13 +125,13 @@ namespace Shaders
         /// </summary>
         public readonly uint GetMemberCount(USpan<char> uniformProperty)
         {
-            return GetMemberCount(new FixedString(uniformProperty));
+            return GetMemberCount(new ASCIIText256(uniformProperty));
         }
 
         /// <summary>
         /// Retrieves how many members the property with the name <paramref name="uniformProperty"/> contains.
         /// </summary>
-        public readonly uint GetMemberCount(FixedString uniformProperty)
+        public readonly uint GetMemberCount(ASCIIText256 uniformProperty)
         {
             ThrowIfNotLoaded();
 
@@ -150,10 +150,10 @@ namespace Shaders
 
         public readonly ShaderUniformPropertyMember GetMember(USpan<char> uniformProperty, uint index)
         {
-            return GetMember(new FixedString(uniformProperty), index);
+            return GetMember(new ASCIIText256(uniformProperty), index);
         }
 
-        public readonly ShaderUniformPropertyMember GetMember(FixedString uniformProperty, uint index)
+        public readonly ShaderUniformPropertyMember GetMember(ASCIIText256 uniformProperty, uint index)
         {
             ThrowIfNotLoaded();
 

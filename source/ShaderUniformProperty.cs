@@ -8,7 +8,7 @@ namespace Shaders
     /// </summary>
     public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
-        public readonly FixedString label;
+        public readonly ASCIIText256 label;
         public readonly byte binding;
         public readonly byte set;
 
@@ -17,7 +17,7 @@ namespace Shaders
         /// </summary>
         public readonly uint size;
 
-        public ShaderUniformProperty(FixedString name, byte binding, byte set, uint size)
+        public ShaderUniformProperty(ASCIIText256 name, byte binding, byte set, uint size)
         {
             this.label = name;
             this.binding = binding;

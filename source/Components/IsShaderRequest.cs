@@ -6,12 +6,12 @@ namespace Shaders.Components
     public struct IsShaderRequest
     {
         public readonly ShaderType type;
-        public FixedString address;
+        public ASCIIText256 address;
         public TimeSpan timeout;
         public TimeSpan duration;
         public Status status;
 
-        public IsShaderRequest(ShaderType type, FixedString address, TimeSpan timeout)
+        public IsShaderRequest(ShaderType type, ASCIIText256 address, TimeSpan timeout)
         {
             this.type = type;
             this.address = address;

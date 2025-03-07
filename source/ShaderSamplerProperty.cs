@@ -8,11 +8,11 @@ namespace Shaders
     /// </summary>
     public readonly struct ShaderSamplerProperty : IEquatable<ShaderSamplerProperty>
     {
-        public readonly FixedString name;
+        public readonly ASCIIText256 name;
         public readonly byte binding;
         public readonly byte set;
 
-        public ShaderSamplerProperty(FixedString name, byte binding, byte set)
+        public ShaderSamplerProperty(ASCIIText256 name, byte binding, byte set)
         {
             this.name = name;
             this.binding = binding;
