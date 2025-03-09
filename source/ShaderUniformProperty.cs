@@ -25,7 +25,7 @@ namespace Shaders
             this.size = size;
         }
 
-        public ShaderUniformProperty(USpan<char> name, byte binding, byte set, uint size)
+        public ShaderUniformProperty(ReadOnlySpan<char> name, byte binding, byte set, uint size)
         {
             this.label = new(name);
             this.binding = binding;
@@ -50,14 +50,14 @@ namespace Shaders
 
         public unsafe readonly override string ToString()
         {
-            USpan<char> buffer = stackalloc char[label.Length + 32];
-            uint length = ToString(buffer);
-            return buffer.GetSpan(length).ToString();
+            Span<char> buffer = stackalloc char[label.Length + 32];
+            int length = ToString(buffer);
+            return buffer.Slice(0, length).ToString();
         }
 
-        public readonly uint ToString(USpan<char> buffer)
+        public readonly int ToString(Span<char> buffer)
         {
-            uint length = label.CopyTo(buffer);
+            int length = label.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
             length += set.ToString(buffer.Slice(length));

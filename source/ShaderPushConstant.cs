@@ -1,4 +1,5 @@
-﻿using Unmanaged;
+﻿using System;
+using Unmanaged;
 
 namespace Shaders
 {
@@ -17,7 +18,7 @@ namespace Shaders
             this.size = size;
         }
 
-        public ShaderPushConstant(USpan<char> propertyName, ASCIIText256 memberName, byte offset, byte size)
+        public ShaderPushConstant(Span<char> propertyName, ASCIIText256 memberName, byte offset, byte size)
         {
             this.propertyName = new(propertyName);
             this.memberName = memberName;

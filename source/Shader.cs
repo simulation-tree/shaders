@@ -31,7 +31,7 @@ namespace Shaders
             }
         }
 
-        public readonly USpan<byte> Bytes
+        public readonly System.Span<byte> Bytes
         {
             get
             {
@@ -52,7 +52,7 @@ namespace Shaders
             }
         }
 
-        public readonly USpan<ShaderVertexInputAttribute> VertexInputAttributes
+        public readonly System.Span<ShaderVertexInputAttribute> VertexInputAttributes
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Shaders
             }
         }
 
-        public readonly USpan<ShaderUniformProperty> UniformProperties
+        public readonly System.Span<ShaderUniformProperty> UniformProperties
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Shaders
             }
         }
 
-        public readonly USpan<ShaderSamplerProperty> SamplerProperties
+        public readonly System.Span<ShaderSamplerProperty> SamplerProperties
         {
             get
             {
@@ -82,7 +82,7 @@ namespace Shaders
             }
         }
 
-        public readonly USpan<ShaderPushConstant> PushConstants
+        public readonly System.Span<ShaderPushConstant> PushConstants
         {
             get
             {
@@ -123,7 +123,7 @@ namespace Shaders
         /// <summary>
         /// Retrieves how many members the property with the name <paramref name="uniformProperty"/> contains.
         /// </summary>
-        public readonly uint GetMemberCount(USpan<char> uniformProperty)
+        public readonly uint GetMemberCount(System.Span<char> uniformProperty)
         {
             return GetMemberCount(new ASCIIText256(uniformProperty));
         }
@@ -135,7 +135,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
+            System.Span<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -148,7 +148,7 @@ namespace Shaders
             return count;
         }
 
-        public readonly ShaderUniformPropertyMember GetMember(USpan<char> uniformProperty, uint index)
+        public readonly ShaderUniformPropertyMember GetMember(System.Span<char> uniformProperty, uint index)
         {
             return GetMember(new ASCIIText256(uniformProperty), index);
         }
@@ -157,7 +157,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            USpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
+            System.Span<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {

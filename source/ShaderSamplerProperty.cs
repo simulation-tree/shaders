@@ -19,7 +19,7 @@ namespace Shaders
             this.set = set;
         }
 
-        public ShaderSamplerProperty(USpan<char> name, byte binding, byte set)
+        public ShaderSamplerProperty(System.Span<char> name, byte binding, byte set)
         {
             this.name = new(name);
             this.binding = binding;
@@ -43,21 +43,21 @@ namespace Shaders
 
         public unsafe readonly override string ToString()
         {
-            USpan<char> buffer = stackalloc char[name.Length + 32];
-            uint length = ToString(buffer);
-            return buffer.GetSpan(length).ToString();
+            Span<char> buffer = stackalloc char[name.Length + 32];
+            int length = ToString(buffer);
+            return buffer.Slice(0, length).ToString();
         }
 
-        public readonly uint ToString(USpan<char> buffer)
+        public readonly int ToString(Span<char> destination)
         {
-            uint length = name.CopyTo(buffer);
-            buffer[length++] = ' ';
-            buffer[length++] = '(';
-            length += binding.ToString(buffer.Slice(length));
-            buffer[length++] = ',';
-            buffer[length++] = ' ';
-            length += set.ToString(buffer.Slice(length));
-            buffer[length++] = ')';
+            int length = name.CopyTo(destination);
+            destination[length++] = ' ';
+            destination[length++] = '(';
+            length += binding.ToString(destination.Slice(length));
+            destination[length++] = ',';
+            destination[length++] = ' ';
+            length += set.ToString(destination.Slice(length));
+            destination[length++] = ')';
             return length;
         }
 
