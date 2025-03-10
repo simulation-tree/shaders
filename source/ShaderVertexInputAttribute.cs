@@ -28,7 +28,7 @@ namespace Shaders
             this.size = size;
         }
 
-        public ShaderVertexInputAttribute(System.Span<char> name, byte location, byte binding, byte offset, long typeHash, byte size)
+        public ShaderVertexInputAttribute(ReadOnlySpan<char> name, byte location, byte binding, byte offset, long typeHash, byte size)
         {
             this.name = new(name);
             this.location = location;

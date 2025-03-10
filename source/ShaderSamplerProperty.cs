@@ -19,7 +19,7 @@ namespace Shaders
             this.set = set;
         }
 
-        public ShaderSamplerProperty(System.Span<char> name, byte binding, byte set)
+        public ShaderSamplerProperty(ReadOnlySpan<char> name, byte binding, byte set)
         {
             this.name = new(name);
             this.binding = binding;
