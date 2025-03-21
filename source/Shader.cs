@@ -58,7 +58,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderVertexInputAttribute>().AsSpan();
+                return GetArray<ShaderVertexInputAttribute>();
             }
         }
 
@@ -68,7 +68,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderUniformProperty>().AsSpan();
+                return GetArray<ShaderUniformProperty>();
             }
         }
 
@@ -78,7 +78,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderSamplerProperty>().AsSpan();
+                return GetArray<ShaderSamplerProperty>();
             }
         }
 
@@ -88,7 +88,7 @@ namespace Shaders
             {
                 ThrowIfNotLoaded();
 
-                return GetArray<ShaderPushConstant>().AsSpan();
+                return GetArray<ShaderPushConstant>();
             }
         }
 
@@ -135,7 +135,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            ReadOnlySpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
+            ReadOnlySpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
             int count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {
@@ -157,7 +157,7 @@ namespace Shaders
         {
             ThrowIfNotLoaded();
 
-            ReadOnlySpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>().AsSpan();
+            ReadOnlySpan<ShaderUniformPropertyMember> allMembers = GetArray<ShaderUniformPropertyMember>();
             uint count = 0;
             foreach (ShaderUniformPropertyMember member in allMembers)
             {

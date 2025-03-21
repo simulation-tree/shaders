@@ -16,9 +16,9 @@ namespace Shaders
         public readonly byte size;
         public readonly long typeHash;
 
-        public readonly TypeLayout Type => TypeRegistry.Get(typeHash);
+        public readonly Types.Type Type => TypeRegistry.GetType(typeHash);
 
-        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, TypeLayout type, byte size)
+        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, Types.Type type, byte size)
         {
             this.name = name;
             this.location = location;
@@ -40,7 +40,7 @@ namespace Shaders
 
         public unsafe static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, byte location, byte binding, byte offset) where T : unmanaged
         {
-            TypeLayout type = TypeRegistry.Get<T>();
+            Types.Type type = TypeRegistry.GetType<T>();
             return new(name, location, binding, offset, type, (byte)sizeof(T));
         }
 
