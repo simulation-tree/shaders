@@ -11,7 +11,7 @@ namespace Shaders
         public readonly byte size;
         public readonly ASCIIText256 name;
 
-        public readonly Types.Type Type => TypeRegistry.GetType(typeHash);
+        public readonly Types.Type Type => MetadataRegistry.GetType(typeHash);
 
         public ShaderUniformPropertyMember(ASCIIText256 label, Types.Type type, byte size, ASCIIText256 name)
         {
