@@ -2,13 +2,13 @@
 
 namespace Shaders.Components
 {
-    public readonly struct IsShader : IEquatable<IsShader>
+    public struct IsShader : IEquatable<IsShader>
     {
-        public readonly uint version;
-        public readonly ShaderType type;
-        public readonly ShaderFlags flags;
+        public ushort version;
+        public ShaderType type;
+        public ShaderFlags flags;
 
-        public IsShader(uint version, ShaderType type, ShaderFlags flags)
+        public IsShader(ushort version, ShaderType type, ShaderFlags flags)
         {
             this.version = version;
             this.type = type;
@@ -28,16 +28,6 @@ namespace Shaders.Components
         public readonly override int GetHashCode()
         {
             return HashCode.Combine(version, type);
-        }
-
-        public readonly IsShader IncrementVersion()
-        {
-            return new IsShader(version + 1, type, flags);
-        }
-
-        public readonly IsShader IncrementVersion(ShaderFlags flags)
-        {
-            return new IsShader(version + 1, type, flags);
         }
 
         public static bool operator ==(IsShader left, IsShader right)

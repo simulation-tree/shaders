@@ -31,6 +31,16 @@ namespace Shaders
             }
         }
 
+        public readonly ushort Version
+        {
+            get
+            {
+                ThrowIfNotLoaded();
+
+                return GetComponent<IsShader>().version;
+            }
+        }
+
         public readonly ReadOnlySpan<byte> Bytes
         {
             get
