@@ -13,35 +13,21 @@ namespace Shaders
         public readonly byte location;
         public readonly byte binding;
         public readonly byte offset;
-        public readonly byte size;
-        public readonly long typeHash;
+        public readonly TypeMetadata type;
 
-        public readonly Types.Type Type => MetadataRegistry.GetType(typeHash);
-
-        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, Types.Type type, byte size)
+        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, TypeMetadata type)
         {
             this.name = name;
             this.location = location;
             this.binding = binding;
             this.offset = offset;
-            this.typeHash = type.Hash;
-            this.size = size;
+            this.type = type;
         }
 
-        public ShaderVertexInputAttribute(ReadOnlySpan<char> name, byte location, byte binding, byte offset, long typeHash, byte size)
+        public static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, byte location, byte binding, byte offset) where T : unmanaged
         {
-            this.name = new(name);
-            this.location = location;
-            this.binding = binding;
-            this.offset = offset;
-            this.typeHash = typeHash;
-            this.size = size;
-        }
-
-        public unsafe static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, byte location, byte binding, byte offset) where T : unmanaged
-        {
-            Types.Type type = MetadataRegistry.GetType<T>();
-            return new(name, location, binding, offset, type, (byte)sizeof(T));
+            TypeMetadata type = MetadataRegistry.GetType<T>();
+            return new(name, location, binding, offset, type);
         }
 
         public readonly override bool Equals(object? obj)
@@ -51,12 +37,12 @@ namespace Shaders
 
         public readonly bool Equals(ShaderVertexInputAttribute other)
         {
-            return name.Equals(other.name) && location == other.location && binding == other.binding && offset == other.offset && typeHash.Equals(other.typeHash);
+            return name.Equals(other.name) && location == other.location && binding == other.binding && offset == other.offset && type == other.type;
         }
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(name, location, binding, offset, typeHash);
+            return HashCode.Combine(name, location, binding, offset, type);
         }
 
         public static bool operator ==(ShaderVertexInputAttribute left, ShaderVertexInputAttribute right)
