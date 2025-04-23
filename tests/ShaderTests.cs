@@ -8,7 +8,7 @@ namespace Shaders.Tests
     {
         static ShaderTests()
         {
-            MetadataRegistry.Load<ShadersTypeBank>();
+            MetadataRegistry.Load<ShadersMetadataBank>();
         }
 
         protected override Schema CreateSchema()
