@@ -20,13 +20,6 @@ namespace Shaders.Components
             status = Status.Submitted;
         }
 
-        public readonly IsShaderRequest BecomeLoaded()
-        {
-            IsShaderRequest request = this;
-            request.status = Status.Loaded;
-            return request;
-        }
-
         public enum Status : byte
         {
             Submitted,
