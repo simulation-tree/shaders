@@ -1,5 +1,4 @@
-﻿using System;
-using Unmanaged;
+﻿using Unmanaged;
 
 namespace Shaders.Components
 {
@@ -7,16 +6,16 @@ namespace Shaders.Components
     {
         public readonly ShaderType type;
         public ASCIIText256 address;
-        public TimeSpan timeout;
-        public TimeSpan duration;
+        public double timeout;
+        public double duration;
         public Status status;
 
-        public IsShaderRequest(ShaderType type, ASCIIText256 address, TimeSpan timeout)
+        public IsShaderRequest(ShaderType type, ASCIIText256 address, double timeout)
         {
             this.type = type;
             this.address = address;
             this.timeout = timeout;
-            duration = TimeSpan.Zero;
+            duration = 0;
             status = Status.Submitted;
         }
 

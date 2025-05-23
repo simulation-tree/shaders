@@ -119,7 +119,7 @@ namespace Shaders
         /// <summary>
         /// Creates a request to load a shader from the given <paramref name="address"/>.
         /// </summary>
-        public Shader(World world, ASCIIText256 address, ShaderType type, TimeSpan timeout = default)
+        public Shader(World world, ASCIIText256 address, ShaderType type, double timeout = default)
         {
             this.world = world;
             value = world.CreateEntity(new IsShaderRequest(type, address, timeout));
