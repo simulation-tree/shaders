@@ -31,9 +31,9 @@
 
   <ItemGroup>
     <Content Include="bin/Debug/net9.0/Shaders.dll" Pack="true" PackagePath="tools/debug/Shaders.dll" Visible="false"/>
-    <Content Include="bin/Debug/net9.0/Shaders.xml" Pack="true" PackagePath="tools/debug/Shaders.xml" Visible="false"/>
+    <Content Include="bin/Debug/net9.0/Shaders.xml" Pack="true" PackagePath="tools/debug/Shaders.xml" Visible="false" Condition="Exists('bin/Debug/net9.0/Shaders.xml')"/>
     <Content Include="bin/Release/net9.0/Shaders.dll" Pack="true" PackagePath="tools/release/Shaders.dll" Visible="false"/>
-    <Content Include="bin/Release/net9.0/Shaders.xml" Pack="true" PackagePath="tools/release/Shaders.xml" Visible="false"/>
+    <Content Include="bin/Release/net9.0/Shaders.xml" Pack="true" PackagePath="tools/release/Shaders.xml" Visible="false" Condition="Exists('bin/Release/net9.0/Shaders.xml')"/>
     <Content Include="build/Shaders.targets" Pack="true" PackagePath="build/Shaders.targets" Visible="false"/>
   </ItemGroup>
 
