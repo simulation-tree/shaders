@@ -10,12 +10,12 @@ namespace Shaders
     public readonly struct ShaderVertexInputAttribute : IEquatable<ShaderVertexInputAttribute>
     {
         public readonly ASCIIText256 name;
-        public readonly byte location;
-        public readonly byte binding;
-        public readonly byte offset;
+        public readonly uint location;
+        public readonly uint binding;
+        public readonly uint offset;
         public readonly TypeMetadata type;
 
-        public ShaderVertexInputAttribute(ASCIIText256 name, byte location, byte binding, byte offset, TypeMetadata type)
+        public ShaderVertexInputAttribute(ASCIIText256 name, uint location, uint binding, uint offset, TypeMetadata type)
         {
             this.name = name;
             this.location = location;
@@ -24,7 +24,7 @@ namespace Shaders
             this.type = type;
         }
 
-        public static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, byte location, byte binding, byte offset) where T : unmanaged
+        public static ShaderVertexInputAttribute Create<T>(ASCIIText256 name, uint location, uint binding, uint offset) where T : unmanaged
         {
             TypeMetadata type = MetadataRegistry.GetType<T>();
             return new(name, location, binding, offset, type);

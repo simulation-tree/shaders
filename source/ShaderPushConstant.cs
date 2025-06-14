@@ -7,10 +7,10 @@ namespace Shaders
     {
         public readonly ASCIIText256 propertyName;
         public readonly ASCIIText256 memberName;
-        public readonly byte offset;
-        public readonly byte size;
+        public readonly uint offset;
+        public readonly uint size;
 
-        public ShaderPushConstant(ASCIIText256 propertyName, ASCIIText256 memberName, byte offset, byte size)
+        public ShaderPushConstant(ASCIIText256 propertyName, ASCIIText256 memberName, uint offset, uint size)
         {
             this.propertyName = propertyName;
             this.memberName = memberName;
@@ -18,7 +18,7 @@ namespace Shaders
             this.size = size;
         }
 
-        public ShaderPushConstant(Span<char> propertyName, ASCIIText256 memberName, byte offset, byte size)
+        public ShaderPushConstant(ReadOnlySpan<char> propertyName, ASCIIText256 memberName, uint offset, uint size)
         {
             this.propertyName = new(propertyName);
             this.memberName = memberName;

@@ -9,28 +9,27 @@ namespace Shaders
     public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
         public readonly ASCIIText256 label;
-        public readonly byte binding;
-        public readonly byte set;
+        public readonly ASCIIText256 typeName;
+        public readonly uint binding;
+        public readonly uint set;
+        public readonly uint byteLength;
 
-        /// <summary>
-        /// Size of the uniform buffer object in bytes.
-        /// </summary>
-        public readonly uint size;
-
-        public ShaderUniformProperty(ASCIIText256 name, byte binding, byte set, uint size)
+        public ShaderUniformProperty(ASCIIText256 name, ASCIIText256 typeName, uint binding, uint set, uint byteLength)
         {
             this.label = name;
+            this.typeName = typeName;
             this.binding = binding;
             this.set = set;
-            this.size = size;
+            this.byteLength = byteLength;
         }
 
-        public ShaderUniformProperty(ReadOnlySpan<char> name, byte binding, byte set, uint size)
+        public ShaderUniformProperty(ReadOnlySpan<char> name, ReadOnlySpan<char> typeName, uint binding, uint set, uint byteLength)
         {
             this.label = new(name);
+            this.typeName = new(typeName);
             this.binding = binding;
             this.set = set;
-            this.size = size;
+            this.byteLength = byteLength;
         }
 
         public readonly override bool Equals(object? obj)
@@ -40,12 +39,12 @@ namespace Shaders
 
         public readonly bool Equals(ShaderUniformProperty other)
         {
-            return label.Equals(other.label) && binding == other.binding && set == other.set && size == other.size;
+            return label.Equals(other.label) && binding == other.binding && set == other.set && byteLength == other.byteLength;
         }
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(label, binding, set, size);
+            return HashCode.Combine(label, binding, set, byteLength);
         }
 
         public unsafe readonly override string ToString()

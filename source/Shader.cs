@@ -51,17 +51,6 @@ namespace Shaders
             }
         }
 
-        public readonly bool IsInstanced
-        {
-            get
-            {
-                ThrowIfNotLoaded();
-
-                ShaderFlags flags = GetComponent<IsShader>().flags;
-                return (flags & ShaderFlags.Instanced) == ShaderFlags.Instanced;
-            }
-        }
-
         public readonly ReadOnlySpan<ShaderVertexInputAttribute> VertexInputAttributes
         {
             get
@@ -102,18 +91,29 @@ namespace Shaders
             }
         }
 
+        public readonly ReadOnlySpan<ShaderStorageBuffer> StorageBuffers
+        {
+            get
+            {
+                ThrowIfNotLoaded();
+
+                return GetArray<ShaderStorageBuffer>();
+            }
+        }
+
         /// <summary>
         /// Creates an empty shader entity.
         /// </summary>
         public Shader(World world, ShaderType type)
         {
             this.world = world;
-            value = world.CreateEntity(new IsShader(1, type, ShaderFlags.None));
+            value = world.CreateEntity(new IsShader(1, type));
             world.CreateArray<ShaderVertexInputAttribute>(value);
             world.CreateArray<ShaderUniformProperty>(value);
             world.CreateArray<ShaderSamplerProperty>(value);
             world.CreateArray<ShaderPushConstant>(value);
             world.CreateArray<ShaderUniformPropertyMember>(value);
+            world.CreateArray<ShaderStorageBuffer>(value);
         }
 
         /// <summary>

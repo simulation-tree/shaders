@@ -6,13 +6,11 @@ namespace Shaders.Components
     {
         public ushort version;
         public ShaderType type;
-        public ShaderFlags flags;
 
-        public IsShader(ushort version, ShaderType type, ShaderFlags flags)
+        public IsShader(ushort version, ShaderType type)
         {
             this.version = version;
             this.type = type;
-            this.flags = flags;
         }
 
         public readonly override bool Equals(object? obj)
