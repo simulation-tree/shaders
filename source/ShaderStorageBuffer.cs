@@ -5,16 +5,16 @@ namespace Shaders
 {
     public readonly struct ShaderStorageBuffer
     {
-        public readonly ASCIIText256 label;
+        public readonly ASCIIText256 name;
         public readonly ASCIIText256 typeName;
         public readonly uint binding;
         public readonly uint set;
         public readonly uint byteLength;
         public readonly Flags flags;
 
-        public ShaderStorageBuffer(ASCIIText256 label, ASCIIText256 typeName, uint binding, uint set, uint byteLength, Flags flags)
+        public ShaderStorageBuffer(ASCIIText256 name, ASCIIText256 typeName, uint binding, uint set, uint byteLength, Flags flags)
         {
-            this.label = label;
+            this.name = name;
             this.typeName = typeName;
             this.binding = binding;
             this.set = set;

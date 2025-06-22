@@ -1,18 +1,19 @@
-﻿using Unmanaged;
+﻿using System;
+using Unmanaged;
 
 namespace Shaders.Components
 {
     public struct IsShaderRequest
     {
-        public readonly ShaderType type;
+        public readonly Flags flags;
         public ASCIIText256 address;
         public double timeout;
         public double duration;
         public Status status;
 
-        public IsShaderRequest(ShaderType type, ASCIIText256 address, double timeout)
+        public IsShaderRequest(Flags flags, ASCIIText256 address, double timeout)
         {
-            this.type = type;
+            this.flags = flags;
             this.address = address;
             this.timeout = timeout;
             duration = 0;
@@ -25,6 +26,14 @@ namespace Shaders.Components
             Loading,
             Loaded,
             NotFound
+        }
+
+        [Flags]
+        public enum Flags : byte
+        {
+            None = 0,
+            FragmentShader = 1,
+            VertexShader = 2
         }
     }
 }

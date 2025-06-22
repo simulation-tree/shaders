@@ -8,7 +8,7 @@ namespace Shaders
     /// </summary>
     public readonly struct ShaderUniformProperty : IEquatable<ShaderUniformProperty>
     {
-        public readonly ASCIIText256 label;
+        public readonly ASCIIText256 name;
         public readonly ASCIIText256 typeName;
         public readonly uint binding;
         public readonly uint set;
@@ -16,7 +16,7 @@ namespace Shaders
 
         public ShaderUniformProperty(ASCIIText256 name, ASCIIText256 typeName, uint binding, uint set, uint byteLength)
         {
-            this.label = name;
+            this.name = name;
             this.typeName = typeName;
             this.binding = binding;
             this.set = set;
@@ -25,7 +25,7 @@ namespace Shaders
 
         public ShaderUniformProperty(ReadOnlySpan<char> name, ReadOnlySpan<char> typeName, uint binding, uint set, uint byteLength)
         {
-            this.label = new(name);
+            this.name = new(name);
             this.typeName = new(typeName);
             this.binding = binding;
             this.set = set;
@@ -39,24 +39,24 @@ namespace Shaders
 
         public readonly bool Equals(ShaderUniformProperty other)
         {
-            return label.Equals(other.label) && binding == other.binding && set == other.set && byteLength == other.byteLength;
+            return name.Equals(other.name) && binding == other.binding && set == other.set && byteLength == other.byteLength;
         }
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(label, binding, set, byteLength);
+            return HashCode.Combine(name, binding, set, byteLength);
         }
 
         public unsafe readonly override string ToString()
         {
-            Span<char> buffer = stackalloc char[label.Length + 32];
+            Span<char> buffer = stackalloc char[name.Length + 32];
             int length = ToString(buffer);
             return buffer.Slice(0, length).ToString();
         }
 
         public readonly int ToString(Span<char> buffer)
         {
-            int length = label.CopyTo(buffer);
+            int length = name.CopyTo(buffer);
             buffer[length++] = ' ';
             buffer[length++] = '(';
             length += set.ToString(buffer.Slice(length));

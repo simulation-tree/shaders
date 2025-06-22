@@ -17,8 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\worlds\core\Worlds.Core.csproj"/>
-    <ProjectReference Include="..\..\unmanaged\core\Unmanaged.Core.csproj"/>
+    <ProjectReference Include="..\..\worlds\core\Worlds.Core.csproj" />
+    <ProjectReference Include="..\..\unmanaged\core\Unmanaged.Core.csproj" />
     <ProjectReference Include="..\..\types\generator\Types.Generator.csproj">
       <OutputItemType>Analyzer</OutputItemType>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
@@ -30,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="bin/**/*" Pack="true" PackagePath="lib" Visible="false"/>
-    <Content Include="buildTransitive/**/*" Pack="true" PackagePath="buildTransitive"/>
+    <Content Include="bin/**/*" Pack="true" PackagePath="lib" Visible="false" />
+    <Content Include="buildTransitive/**/*" Pack="true" PackagePath="buildTransitive" />
   </ItemGroup>
 
 </Project>

@@ -6,15 +6,17 @@ namespace Shaders
 {
     public readonly struct ShaderUniformPropertyMember : IEquatable<ShaderUniformPropertyMember>
     {
-        public readonly ASCIIText256 label;
+        public readonly long uniformPropertyNameHash;
         public readonly TypeMetadata type;
         public readonly ASCIIText256 name;
+        public readonly uint offset;
 
-        public ShaderUniformPropertyMember(ASCIIText256 label, TypeMetadata type, ASCIIText256 name)
+        public ShaderUniformPropertyMember(long uniformPropertyNameHash, TypeMetadata type, ASCIIText256 name, uint offset)
         {
-            this.label = label;
+            this.uniformPropertyNameHash = uniformPropertyNameHash;
             this.type = type;
             this.name = name;
+            this.offset = offset;
         }
 
         public readonly override bool Equals(object? obj)
@@ -24,12 +26,12 @@ namespace Shaders
 
         public readonly bool Equals(ShaderUniformPropertyMember other)
         {
-            return label.Equals(other.label) && type.Equals(other.type) && name.Equals(other.name);
+            return uniformPropertyNameHash.Equals(other.uniformPropertyNameHash) && type.Equals(other.type) && name.Equals(other.name) && offset.Equals(other.offset);
         }
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(label, type, name);
+            return HashCode.Combine(uniformPropertyNameHash, type, name, offset);
         }
 
         public readonly override string ToString()
