@@ -25,7 +25,10 @@ namespace Shaders.Components
 
         public readonly override int GetHashCode()
         {
-            return HashCode.Combine(version, type);
+            int hash = 17;
+            hash = hash * 31 + version;
+            hash = hash * 31 + type.GetHashCode();
+            return hash;
         }
 
         public static bool operator ==(IsShader left, IsShader right)
