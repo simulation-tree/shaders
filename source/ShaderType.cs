@@ -1,6 +1,6 @@
 ﻿namespace Shaders
 {
-    public enum ShaderType : byte
+    public enum ShaderType
     {
         Unknown,
         Vertex,
